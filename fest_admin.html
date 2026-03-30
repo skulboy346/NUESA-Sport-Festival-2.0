@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Admin | NUESA 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        .neon-blue { color: #3b82f6; text-shadow: 0 0 10px rgba(59, 130, 246, 0.7); }
+        .nav-btn { padding: 10px 16px; font-weight: 700; color: #94a3b8; border-bottom: 3px solid transparent; transition: 0.2s; }
+        .nav-btn.active { color: #3b82f6; border-bottom-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .section { display: none; } .section.active { display: block; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <div class="bg-black text-white py-2 px-4 flex justify-between items-center z-50 relative border-b border-slate-800">
+        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">OFFICIAL NUESA SPORTS PLATFORM</span>
+        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA SPORTS</span>
+        <div class="flex space-x-4 text-slate-300 text-sm">
+            <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="hover:text-pink-500 transition transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-500 transition transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://x.com/Ambassador30788" target="_blank" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://youtube.com/@theambassadorsport" target="_blank" class="hover:text-red-500 transition transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-500 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+    </div>
+
+    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm p-4 transition-all">
+        <div class="bg-slate-800 p-8 max-w-sm w-full text-center rounded-2xl shadow-[0_0_40px_rgba(59,130,246,0.3)] border border-blue-500">
+            <i class="fa-solid fa-crown text-5xl neon-blue mb-4"></i>
+            <h2 class="text-3xl font-black text-white mb-1 tracking-wide">FESTIVAL ADMIN</h2>
+            <p class="text-xs text-slate-400 mb-6 font-bold tracking-widest uppercase">NUESA Sport Festival '26</p>
+            <input type="password" id="adm-pass" placeholder="ENTER SECURE PIN" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-4 text-center tracking-[0.3em] text-xl mb-4 focus:border-blue-500 outline-none uppercase font-black transition">
+            <button onclick="checkLogin()" class="w-full bg-blue-600 text-white font-black tracking-widest py-4 rounded-lg hover:bg-blue-500 transition shadow-lg">AUTHORIZE</button>
+            <p id="login-error" class="text-red-500 text-xs font-bold mt-4 hidden tracking-widest uppercase"><i class="fa-solid fa-triangle-exclamation"></i> INCORRECT PIN</p>
+        </div>
+    </div>
+
+    <nav class="bg-slate-900 border-b border-slate-800 shadow-xl sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3 w-full md:w-auto justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-crown text-blue-500 text-2xl"></i>
+                    <span class="text-xl font-black text-white tracking-tighter block">NUESA<span class="text-blue-500">ADMIN</span></span>
+                </div>
+            </div>
+            <div class="flex gap-2 overflow-x-auto w-full md:w-auto no-scrollbar pb-1 md:pb-0">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active whitespace-nowrap">DASHBOARD</button>
+                <button onclick="switchTab('rosters')" id="btn-rosters" class="nav-btn whitespace-nowrap">ROSTERS</button>
+                <button onclick="switchTab('medals')" id="btn-medals" class="nav-btn whitespace-nowrap">MEDALS</button>
+                <button onclick="switchTab('news')" id="btn-news" class="nav-btn whitespace-nowrap">NEWS</button>
+                <button onclick="switchTab('sponsors')" id="btn-sponsors" class="nav-btn whitespace-nowrap">SPONSORS</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full">
+        <div id="dashboard" class="section active space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h2 class="text-3xl font-black text-white tracking-wide">Control Center</h2>
+                <button onclick="if(window.fetchData) window.fetchData()" class="bg-slate-800 text-slate-300 px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-700 border border-slate-700 transition flex items-center gap-2"><i class="fa-solid fa-rotate-right"></i> REFRESH</button>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl lg:col-span-1">
+                    <h3 class="text-white font-black text-xl mb-1 uppercase"><i class="fa-solid fa-clock text-blue-500 mr-2"></i> Countdown Timer</h3>
+                    <div class="grid grid-cols-1 gap-2 mt-4">
+                        <div class="flex gap-2">
+                            <input type="datetime-local" id="admin-date" class="bg-slate-900 text-white p-3 rounded-lg border border-slate-600 w-full outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                    <button onclick="updateLiveTimer()" class="w-full mt-3 bg-blue-600 text-white px-4 py-3 rounded-lg font-black tracking-widest hover:bg-blue-500 transition">UPDATE TIMER</button>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl lg:col-span-1">
+                    <h3 class="text-white font-black text-xl mb-1 uppercase"><i class="fa-solid fa-lock text-blue-500 mr-2"></i> DOS Portal Gate</h3>
+                    <p class="text-xs text-slate-400 mb-6">Lock or unlock the ability for departments to modify rosters.</p>
+                    <button onclick="toggleGate()" id="btn-gate" class="w-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-black py-6 rounded-lg transition tracking-widest flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-spinner fa-spin text-2xl"></i> CHECKING...</button>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-4 lg:col-span-1">
+                    <div class="bg-slate-800 p-6 rounded-xl shadow-lg border-t-4 border-blue-500 relative overflow-hidden flex flex-col justify-center">
+                        <p class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Total Rosters Started</p>
+                        <h3 class="text-5xl font-black mt-2 text-white" id="stat-rosters">0</h3>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl shadow-lg border-t-4 border-emerald-500 relative overflow-hidden flex flex-col justify-center">
+                        <p class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Total Athletes</p>
+                        <h3 class="text-5xl font-black mt-2 text-emerald-400" id="stat-athletes">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="rosters" class="section space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-4 gap-4">
+                <h2 class="text-3xl font-black text-white tracking-wide">Master Roster List</h2>
+                <select id="filter-dept" onchange="window.renderRosters()" class="bg-slate-800 text-white p-3 rounded-lg border border-slate-700 font-bold outline-none focus:border-blue-500 w-full md:w-auto">
+                    <option value="ALL">All Departments</option>
+                    <option value="AESA">AESA</option>
+                    <option value="NAAES">NAAES</option>
+                    <option value="ULSESA">ULSESA</option>
+                    <option value="SSESA">SSESA</option>
+                    <option value="TVESA">TVESA</option>
+                    <option value="EFSA">EFSA</option>
+                    <option value="EMSA">EMSA</option>
+                    <option value="NAPHER-SD">NAPHER-SD</option>
+                </select>
+            </div>
+            <div id="admin-rosters-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <div id="medals" class="section space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-3xl font-black text-white tracking-wide">Medal Table Manager</h2>
+            </div>
+            <div id="medal-controls" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <div id="news" class="section space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-3xl font-black text-white tracking-wide">Live News Feed</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 md:col-span-1 h-fit">
+                    <h3 class="text-white font-black text-xl mb-4" id="news-form-title"><i class="fa-solid fa-bullhorn text-blue-500 mr-2"></i> POST UPDATE</h3>
+                    <form id="newsForm" class="space-y-4">
+                        <input type="hidden" id="nEditId" value="">
+                        <div><input type="text" id="nTitle" required placeholder="Headline" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
+                        <div><input type="text" id="nAuthor" required placeholder="Author" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
+                        <div><input type="file" id="nImage" accept="image/*" class="w-full text-slate-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white cursor-pointer"></div>
+                        <div><textarea id="nBody" required placeholder="Write update..." rows="4" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></textarea></div>
+                        <div class="flex gap-2">
+                            <button type="submit" id="btnNews" class="w-full bg-blue-600 text-white font-black py-3 rounded hover:bg-blue-500 transition">PUBLISH</button>
+                            <button type="button" onclick="window.cancelNewsEdit()" id="btnCancelNews" class="hidden w-1/3 bg-slate-700 text-white font-bold py-3 rounded hover:bg-slate-600 transition">CANCEL</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div id="news-list" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sponsors" class="section space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-3xl font-black text-white tracking-wide">Sponsors & Partners</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 md:col-span-1 h-fit">
+                    <form id="sponsorForm" class="space-y-4">
+                        <div><input type="text" id="spName" required placeholder="Brand Name" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
+                        <div><input type="file" id="spLogo" accept="image/*" required class="w-full text-slate-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white cursor-pointer"></div>
+                        <button type="submit" id="btnSponsor" class="w-full bg-green-600 text-white font-bold py-3 rounded hover:bg-green-500 transition">UPLOAD SPONSOR</button>
+                    </form>
+                </div>
+                <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div id="sponsors-list" class="grid grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active'); 
+            document.getElementById(`btn-${tabId}`).classList.add('active');
+        }
+        function checkLogin() {
+            if(document.getElementById('adm-pass').value.trim().toUpperCase() === 'NUESAADMIN26') {
+                document.getElementById('login-modal').style.display = 'none';
+                if(typeof window.fetchData === 'function') window.fetchData();
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('adm-pass').addEventListener('keypress', function (e) { if (e.key === 'Enter') checkLogin(); });
+        });
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        // ADD YOUR FIREBASE CONFIG HERE
+        const firebaseConfig = {
+            apiKey: "AIzaSyAr2aGfBXiQ2V9nx3stCHv51NQb83ATex4",
+            authDomain: "nuesa-sport-festival-26.firebaseapp.com",
+            projectId: "nuesa-sport-festival-26",
+            storageBucket: "nuesa-sport-festival-26.firebasestorage.app",
+            messagingSenderId: "707147353888",
+            appId: "1:707147353888:web:770a7ec13bc19951f59145",
+            measurementId: "G-50PM5XYPG8"
+        };
+        const app = initializeApp(firebaseConfig); 
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        let allRosters = []; let medalData = []; let gateStatus = 'open';
+        const deptNames = ["AESA", "NAAES", "ULSESA", "SSESA", "TVESA", "EFSA", "EMSA", "NAPHER-SD"];
+
+        window.fetchData = async () => { await fetchSystemSettings(); await fetchRosters(); await fetchMedals(); await fetchNews(); await fetchSponsors(); };
+
+        // --- SYSTEM SETTINGS ---
+        async function fetchSystemSettings() {
+            const snap = await getDoc(doc(db, "nuesa_fest_settings", "system"));
+            if(snap.exists()) {
+                const data = snap.data();
+                if(data.registrationGate) gateStatus = data.registrationGate;
+                document.getElementById('admin-date').value = data.targetDate || "";
+            }
+            updateGateUI();
+        }
+        window.updateLiveTimer = async () => {
+            await setDoc(doc(db, "nuesa_fest_settings", "system"), { targetDate: document.getElementById('admin-date').value }, { merge: true });
+            alert("Timer Updated & Synced!");
+        };
+        function updateGateUI() {
+            const btn = document.getElementById('btn-gate');
+            if(gateStatus === 'open') {
+                btn.className = "w-full bg-green-900/30 border-2 border-green-500 text-green-400 font-black py-6 rounded-lg tracking-widest shadow-[0_0_15px_rgba(34,197,94,0.2)]";
+                btn.innerHTML = '<i class="fa-solid fa-door-open text-3xl"></i> PORTAL OPEN';
+            } else {
+                btn.className = "w-full bg-red-900/30 border-2 border-red-500 text-red-400 font-black py-6 rounded-lg tracking-widest shadow-[0_0_15px_rgba(255,42,42,0.2)]";
+                btn.innerHTML = '<i class="fa-solid fa-lock text-3xl"></i> PORTAL LOCKED';
+            }
+        }
+        window.toggleGate = async () => {
+            if(!confirm("Toggle the DOS Portal access status?")) return;
+            gateStatus = gateStatus === 'open' ? 'closed' : 'open';
+            updateGateUI();
+            await setDoc(doc(db, "nuesa_fest_settings", "system"), { registrationGate: gateStatus }, { merge: true });
+        };
+
+        // --- MASTER ROSTERS (With WhatsApp DM integration) ---
+        async function fetchRosters() {
+            const snap = await getDocs(collection(db, "nuesa_fest_rosters"));
+            allRosters = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            let totalAthletes = 0;
+            allRosters.forEach(r => totalAthletes += (r.players ? r.players.length : 0));
+            document.getElementById('stat-rosters').innerText = allRosters.length;
+            document.getElementById('stat-athletes').innerText = totalAthletes;
+            window.renderRosters();
+        }
+        window.renderRosters = () => {
+            const container = document.getElementById('admin-rosters-container');
+            const filter = document.getElementById('filter-dept').value;
+            container.innerHTML = '';
+            const filteredRosters = filter === 'ALL' ? allRosters : allRosters.filter(r => r.id === filter);
+            
+            filteredRosters.forEach(r => {
+                container.innerHTML += `
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
+                        <h3 class="text-white font-black text-xl mb-4 border-b border-slate-700 pb-2">${r.id} <span class="text-xs text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded ml-2">${r.players ? r.players.length : 0} Participants</span></h3>
+                        <div class="max-h-64 overflow-y-auto space-y-2 custom-scrollbar pr-2">
+                            ${r.players && r.players.length > 0 ? r.players.map(p => {
+                                // Format phone for WhatsApp API (Convert leading 0 to 234)
+                                const waNumber = p.phone ? p.phone.replace(/\\D/g, '').replace(/^0/, '234') : '';
+                                const waMsg = encodeURIComponent(`Hello ${p.name}, this is an official message regarding the NUESA Sport Festival '26.`);
+                                
+                                return `
+                                <div class="text-sm font-semibold text-slate-300 bg-slate-900 p-2 rounded flex flex-col gap-1 border border-slate-700/50">
+                                    <div class="flex items-center flex-wrap gap-2">
+                                        <span class="text-white uppercase">${p.name}</span>
+                                        ${p.role === 'Coach' ? `<span class="text-[10px] text-yellow-500 font-bold bg-yellow-900/30 px-1 rounded border border-yellow-900/50">COACH</span>` : `<span class="text-[10px] text-orange-400 font-bold bg-orange-900/30 px-1 rounded border border-orange-900/50">${p.level || 'N/A'}</span>`}
+                                    </div>
+                                    <div class="flex items-center flex-wrap gap-2 text-xs mt-1">
+                                        <span class="text-slate-400 font-mono bg-slate-800 px-1 rounded border border-slate-700">${p.matric || 'NO MATRIC'}</span>
+                                        
+                                        ${p.phone ? `
+                                            <div class="flex items-center gap-1">
+                                                <span class="text-green-400 font-mono"><i class="fa-brands fa-whatsapp mr-1"></i>${p.phone}</span>
+                                                <a href="https://wa.me/${waNumber}?text=${waMsg}" target="_blank" class="bg-green-600 hover:bg-green-500 text-white text-[9px] px-1.5 py-0.5 rounded uppercase tracking-widest transition shadow-md"><i class="fa-solid fa-paper-plane mr-1"></i>DM</a>
+                                            </div>
+                                        ` : ''}
+                                        
+                                        <span class="text-emerald-400 uppercase tracking-widest ml-auto text-[10px]">${p.sport}</span>
+                                    </div>
+                                </div>`
+                            }).join('') : '<div class="text-xs text-slate-500 font-bold">NO PARTICIPANTS</div>'}
+                        </div>
+                    </div>`;
+            });
+        };
+
+        // --- MEDAL MANAGER ---
+        async function fetchMedals() {
+            const snap = await getDocs(collection(db, "nuesa_fest_medals"));
+            medalData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            for (let dept of deptNames) {
+                if (!medalData.find(m => m.id === dept)) {
+                    await setDoc(doc(db, "nuesa_fest_medals", dept), { gold: 0, silver: 0, bronze: 0 });
+                    medalData.push({ id: dept, gold: 0, silver: 0, bronze: 0 });
+                }
+            }
+            window.renderMedals();
+        }
+        window.renderMedals = () => {
+            const container = document.getElementById('medal-controls');
+            container.innerHTML = '';
+            medalData.sort((a, b) => (b.gold || 0) - (a.gold || 0) || (b.silver || 0) - (a.silver || 0) || (b.bronze || 0) - (a.bronze || 0));
+            medalData.forEach((medal, index) => {
+                container.innerHTML += `
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 flex justify-between items-center shadow-md">
+                        <div class="flex items-center gap-3"><span class="text-slate-500 font-black">#${index + 1}</span><h3 class="font-black text-white">${medal.id}</h3></div>
+                        <div class="flex gap-4">
+                            <div class="text-center"><span class="text-[10px] text-yellow-500 font-bold">G</span><div class="flex items-center gap-1 bg-slate-900 p-1 rounded"><button onclick="window.updateMedal('${medal.id}', 'gold', -1)" class="text-slate-400 hover:text-white px-1">-</button><span class="text-white w-4 text-center">${medal.gold || 0}</span><button onclick="window.updateMedal('${medal.id}', 'gold', 1)" class="text-yellow-500 px-1">+</button></div></div>
+                            <div class="text-center"><span class="text-[10px] text-slate-300 font-bold">S</span><div class="flex items-center gap-1 bg-slate-900 p-1 rounded"><button onclick="window.updateMedal('${medal.id}', 'silver', -1)" class="text-slate-400 hover:text-white px-1">-</button><span class="text-white w-4 text-center">${medal.silver || 0}</span><button onclick="window.updateMedal('${medal.id}', 'silver', 1)" class="text-slate-300 px-1">+</button></div></div>
+                            <div class="text-center"><span class="text-[10px] text-orange-600 font-bold">B</span><div class="flex items-center gap-1 bg-slate-900 p-1 rounded"><button onclick="window.updateMedal('${medal.id}', 'bronze', -1)" class="text-slate-400 hover:text-white px-1">-</button><span class="text-white w-4 text-center">${medal.bronze || 0}</span><button onclick="window.updateMedal('${medal.id}', 'bronze', 1)" class="text-orange-500 px-1">+</button></div></div>
+                        </div>
+                    </div>`;
+            });
+        };
+        window.updateMedal = async (deptId, type, change) => {
+            const medalIndex = medalData.findIndex(m => m.id === deptId);
+            if(medalIndex > -1) {
+                let newVal = Math.max(0, (medalData[medalIndex][type] || 0) + change);
+                medalData[medalIndex][type] = newVal;
+                window.renderMedals();
+                await updateDoc(doc(db, "nuesa_fest_medals", deptId), { [type]: newVal });
+            }
+        };
+
+        // --- NEWS MANAGER ---
+        async function fetchNews() {
+            const snap = await getDocs(query(collection(db, "nuesa_fest_news"), orderBy("timestamp", "desc")));
+            const container = document.getElementById('news-list');
+            container.innerHTML = '';
+            snap.forEach(doc => {
+                const data = doc.data();
+                container.innerHTML += `
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 mb-2 flex gap-4">
+                        ${data.imageUrl ? `<img src="${data.imageUrl}" class="w-16 h-16 object-cover rounded">` : ''}
+                        <div>
+                            <h4 class="text-white font-black">${data.title}</h4>
+                            <div class="mt-2 flex gap-3">
+                                <button onclick="window.editNews('${doc.id}', \`${data.title.replace(/`/g, '\\`')}\`, \`${data.author.replace(/`/g, '\\`')}\`, \`${data.body.replace(/`/g, '\\`')}\`)" class="text-xs text-blue-400 font-bold">Edit</button>
+                                <button onclick="window.deleteNews('${doc.id}', '${data.imagePath || ''}')" class="text-xs text-red-500 font-bold">Delete</button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+        document.getElementById('newsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnNews'); btn.innerText = "PROCESSING..."; btn.disabled = true;
+            const editId = document.getElementById('nEditId').value;
+            const file = document.getElementById('nImage').files[0];
+            let imageUrl = null, imagePath = null;
+            if (file) {
+                imagePath = `news_images/${Date.now()}_${file.name}`;
+                await uploadBytes(ref(storage, imagePath), file);
+                imageUrl = await getDownloadURL(ref(storage, imagePath));
+            }
+            const postData = { title: document.getElementById('nTitle').value, author: document.getElementById('nAuthor').value, body: document.getElementById('nBody').value };
+            if (imageUrl) { postData.imageUrl = imageUrl; postData.imagePath = imagePath; }
+            if (editId) { await updateDoc(doc(db, "nuesa_fest_news", editId), postData); } 
+            else { postData.timestamp = serverTimestamp(); await addDoc(collection(db, "nuesa_fest_news"), postData); }
+            document.getElementById('newsForm').reset(); window.cancelNewsEdit(); await fetchNews();
+            btn.innerText = "PUBLISH"; btn.disabled = false;
+        });
+        window.editNews = (id, title, author, body) => {
+            document.getElementById('nEditId').value = id; document.getElementById('nTitle').value = title;
+            document.getElementById('nAuthor').value = author; document.getElementById('nBody').value = body;
+            document.getElementById('btnNews').innerText = "UPDATE POST"; document.getElementById('btnCancelNews').classList.remove('hidden');
+        };
+        window.cancelNewsEdit = () => { document.getElementById('newsForm').reset(); document.getElementById('nEditId').value = ''; document.getElementById('btnNews').innerText = "PUBLISH"; document.getElementById('btnCancelNews').classList.add('hidden'); };
+        window.deleteNews = async (id, imagePath) => {
+            if(!confirm("Delete post?")) return;
+            await deleteDoc(doc(db, "nuesa_fest_news", id));
+            if (imagePath && imagePath !== 'undefined') await deleteObject(ref(storage, imagePath)).catch(e=>console.log(e));
+            await fetchNews();
+        };
+
+        // --- SPONSORS MANAGER ---
+        async function fetchSponsors() {
+            const snap = await getDocs(collection(db, "nuesa_fest_sponsors"));
+            const container = document.getElementById('sponsors-list');
+            container.innerHTML = '';
+            snap.forEach(doc => {
+                const sp = doc.data();
+                container.innerHTML += `
+                    <div class="bg-slate-900 border border-slate-700 rounded-lg p-4 text-center shadow">
+                        <img src="${sp.logoUrl}" class="h-10 mx-auto mb-2 object-contain bg-white/5 rounded">
+                        <h4 class="text-white text-xs font-bold uppercase mb-2">${sp.name}</h4>
+                        <button onclick="window.deleteSponsor('${doc.id}', '${sp.logoPath}')" class="text-xs bg-red-900/30 text-red-500 font-bold py-1 px-3 rounded border border-red-900/50">REMOVE</button>
+                    </div>`;
+            });
+        }
+        document.getElementById('sponsorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = document.getElementById('spLogo').files[0];
+            const logoPath = `sponsor_logos/${Date.now()}_${file.name}`;
+            await uploadBytes(ref(storage, logoPath), file);
+            const logoUrl = await getDownloadURL(ref(storage, logoPath));
+            await addDoc(collection(db, "nuesa_fest_sponsors"), { name: document.getElementById('spName').value, logoUrl, logoPath, timestamp: serverTimestamp() });
+            document.getElementById('sponsorForm').reset(); await fetchSponsors();
+        });
+        window.deleteSponsor = async (id, logoPath) => {
+            if(!confirm(`Remove sponsor?`)) return;
+            await deleteDoc(doc(db, "nuesa_fest_sponsors", id));
+            if(logoPath && logoPath !== 'undefined') await deleteObject(ref(storage, logoPath)).catch(e=>console.log(e));
+            await fetchSponsors();
+        };
+    </script>
+</body>
+</html>

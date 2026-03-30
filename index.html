@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUESA Sport Festival '26</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        .hero-bg { background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=2070&auto=format&fit=crop') center/cover; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <div class="bg-black text-white py-2 px-4 flex justify-between items-center z-50 relative border-b border-slate-800">
+        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">OFFICIAL NUESA SPORTS PLATFORM</span>
+        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA SPORTS</span>
+        <div class="flex space-x-4 text-slate-300 text-sm">
+            <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="hover:text-pink-500 transition transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-500 transition transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://x.com/Ambassador30788" target="_blank" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://youtube.com/@theambassadorsport" target="_blank" class="hover:text-red-500 transition transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-500 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+    </div>
+
+    <nav class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-crown text-blue-500 text-2xl"></i>
+                <span class="text-xl font-black text-white tracking-tighter block">NUESA<span class="text-blue-500">FEST'26</span></span>
+            </div>
+            <a href="dos_portal.html" class="text-xs font-bold text-slate-400 hover:text-white transition uppercase tracking-widest"><i class="fa-solid fa-lock mr-1"></i> DOS Portal</a>
+        </div>
+    </nav>
+
+    <header class="hero-bg py-20 text-center px-4 border-b border-blue-900/50">
+        <h1 class="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter">THE BATTLE FOR <span class="text-blue-500">GLORY</span></h1>
+        <p class="text-slate-300 font-bold tracking-widest uppercase mb-10">Faculty of Education Sport Festival 2026</p>
+        
+        <div class="bg-slate-900/80 border border-blue-500/30 p-6 rounded-2xl inline-block backdrop-blur-sm">
+            <p id="timer-label" class="text-blue-400 text-xs font-bold uppercase tracking-widest mb-2">TIME TO KICKOFF</p>
+            <div id="countdown" class="flex gap-4 justify-center">
+                <div class="text-center"><span class="block text-4xl font-black text-white" id="days">00</span><span class="text-[10px] text-slate-400 font-bold uppercase">Days</span></div>
+                <div class="text-center"><span class="block text-4xl font-black text-white" id="hours">00</span><span class="text-[10px] text-slate-400 font-bold uppercase">Hours</span></div>
+                <div class="text-center"><span class="block text-4xl font-black text-white" id="mins">00</span><span class="text-[10px] text-slate-400 font-bold uppercase">Mins</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-1 space-y-4">
+            <h2 class="text-2xl font-black text-white tracking-wide border-b border-slate-800 pb-2"><i class="fa-solid fa-medal text-yellow-500 mr-2"></i> Medal Table</h2>
+            <div id="medal-table" class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
+                <div class="text-center py-10 text-slate-500 font-bold uppercase tracking-widest">Loading Medals...</div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2 space-y-4">
+            <h2 class="text-2xl font-black text-white tracking-wide border-b border-slate-800 pb-2"><i class="fa-solid fa-newspaper text-blue-500 mr-2"></i> Festival Updates</h2>
+            <div id="news-feed" class="space-y-4">
+                <div class="text-center py-10 text-slate-500 font-bold uppercase tracking-widest">Loading Updates...</div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 border-t border-slate-800 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h3 class="text-sm font-bold text-slate-500 tracking-widest uppercase mb-8">Official Partners & Sponsors</h3>
+            <div id="sponsors-grid" class="flex flex-wrap justify-center gap-8 items-center opacity-70 hover:opacity-100 transition mb-12">
+                </div>
+            
+            <div class="border-t border-slate-800 pt-8 flex flex-col items-center">
+                <p class="text-slate-400 text-xs font-bold tracking-widest uppercase mb-4">Follow The Festival</p>
+                <div class="flex gap-6">
+                    <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="text-slate-500 hover:text-pink-500 text-2xl transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://x.com/Ambassador30788" target="_blank" class="text-slate-500 hover:text-white text-2xl transition"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="text-slate-500 hover:text-blue-500 text-2xl transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="text-slate-500 hover:text-pink-600 text-2xl transition"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://youtube.com/@theambassadorsport" target="_blank" class="text-slate-500 hover:text-red-500 text-2xl transition"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // ADD YOUR FIREBASE CONFIG HERE
+        const firebaseConfig = {
+            apiKey: "AIzaSyAr2aGfBXiQ2V9nx3stCHv51NQb83ATex4",
+            authDomain: "nuesa-sport-festival-26.firebaseapp.com",
+            projectId: "nuesa-sport-festival-26",
+            storageBucket: "nuesa-sport-festival-26.firebasestorage.app",
+            messagingSenderId: "707147353888",
+            appId: "1:707147353888:web:770a7ec13bc19951f59145",
+            measurementId: "G-50PM5XYPG8"
+        };
+        const app = initializeApp(firebaseConfig); 
+        const db = getFirestore(app);
+
+        // Timer Logic
+        let targetDate = new Date().getTime();
+        onSnapshot(doc(db, "nuesa_fest_settings", "system"), (doc) => {
+            if(doc.exists() && doc.data().targetDate) { targetDate = new Date(doc.data().targetDate).getTime(); }
+        });
+
+        setInterval(() => {
+            const now = new Date().getTime(); const distance = targetDate - now;
+            if (distance < 0) { document.getElementById('countdown').innerHTML = "<div class='text-2xl font-black text-emerald-400 tracking-widest'>EVENT IS LIVE</div>"; return; }
+            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("mins").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+        }, 1000);
+
+        // Real-time Medals
+        onSnapshot(collection(db, "nuesa_fest_medals"), (snap) => {
+            let medals = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            medals.sort((a, b) => (b.gold || 0) - (a.gold || 0) || (b.silver || 0) - (a.silver || 0) || (b.bronze || 0) - (a.bronze || 0));
+            
+            let html = `<div class="grid grid-cols-12 gap-2 bg-slate-900 p-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest"><div class="col-span-6">Department</div><div class="col-span-2 text-center text-yellow-500">G</div><div class="col-span-2 text-center text-slate-300">S</div><div class="col-span-2 text-center text-orange-600">B</div></div>`;
+            
+            medals.forEach((m, i) => {
+                html += `
+                    <div class="grid grid-cols-12 gap-2 p-3 border-t border-slate-700 items-center hover:bg-slate-700/50 transition">
+                        <div class="col-span-6 font-black text-white text-sm"><span class="text-slate-500 mr-2">${i+1}</span> ${m.id}</div>
+                        <div class="col-span-2 text-center font-bold text-white">${m.gold || 0}</div>
+                        <div class="col-span-2 text-center font-bold text-white">${m.silver || 0}</div>
+                        <div class="col-span-2 text-center font-bold text-white">${m.bronze || 0}</div>
+                    </div>`;
+            });
+            document.getElementById('medal-table').innerHTML = html;
+        });
+
+        // Real-time News
+        const qNews = query(collection(db, "nuesa_fest_news"), orderBy("timestamp", "desc"));
+        onSnapshot(qNews, (snap) => {
+            let html = '';
+            snap.forEach(doc => {
+                const data = doc.data();
+                html += `
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg hover:border-blue-500/50 transition duration-300">
+                        ${data.imageUrl ? `<img src="${data.imageUrl}" class="w-full h-48 object-cover">` : ''}
+                        <div class="p-6">
+                            <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-2">${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : ''} | BY ${data.author}</p>
+                            <h3 class="text-xl font-black text-white mb-2">${data.title}</h3>
+                            <p class="text-sm text-slate-300 whitespace-pre-wrap">${data.body}</p>
+                        </div>
+                    </div>`;
+            });
+            if(html === '') html = '<div class="text-center py-10 text-slate-500 font-bold uppercase tracking-widest">No recent updates.</div>';
+            document.getElementById('news-feed').innerHTML = html;
+        });
+
+        // Real-time Sponsors
+        onSnapshot(collection(db, "nuesa_fest_sponsors"), (snap) => {
+            let html = '';
+            snap.forEach(doc => { html += `<img src="${doc.data().logoUrl}" alt="${doc.data().name}" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">`; });
+            document.getElementById('sponsors-grid').innerHTML = html;
+        });
+    </script>
+</body>
+</html>
