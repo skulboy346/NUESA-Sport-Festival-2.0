@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUESA Sport Festival '26</title>
+    <title>NUESA SPORT FESTIVAL 2.0 | DEAN'S CUP '26</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600;800&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
-        .hero-bg { background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=2070&auto=format&fit=crop') center/cover; }
+        .hero-bg { background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95)), url('https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=2070&auto=format&fit=crop') center/cover; }
+        .update-tab { padding: 6px 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 6px; cursor: pointer; transition: 0.3s; border: 1px solid #334155; color: #94a3b8; }
+        .update-tab.active { background-color: #3b82f6; color: white; border-color: #3b82f6; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -32,15 +34,16 @@
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-crown text-blue-500 text-2xl"></i>
-                <span class="text-xl font-black text-white tracking-tighter block">NUESA<span class="text-blue-500">FEST'26</span></span>
+                <span class="text-xl font-black text-white tracking-tighter block">NUESA<span class="text-blue-500">FEST 2.0</span></span>
             </div>
             <a href="dos_portal.html" class="text-xs font-bold text-slate-400 hover:text-white transition uppercase tracking-widest"><i class="fa-solid fa-lock mr-1"></i> DOS Portal</a>
         </div>
     </nav>
 
-    <header class="hero-bg py-20 text-center px-4 border-b border-blue-900/50">
-        <h1 class="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter">THE BATTLE FOR <span class="text-blue-500">GLORY</span></h1>
-        <p class="text-slate-300 font-bold tracking-widest uppercase mb-10">Faculty of Education Sport Festival 2026</p>
+    <header class="hero-bg py-24 text-center px-4 border-b border-blue-900/50">
+        <span class="border border-blue-500 text-blue-400 text-xs font-black px-4 py-1.5 rounded-full tracking-[0.2em] uppercase bg-blue-900/20 shadow-[0_0_10px_rgba(59,130,246,0.3)] mb-6 inline-block">NUESA Sport Festival 2.0 (Dean's Cup '26)</span>
+        <h1 class="text-5xl md:text-7xl font-black text-white mb-2 tracking-tighter">THE <span class="text-blue-500">IMPERIUM</span></h1>
+        <p class="text-slate-300 text-lg md:text-xl font-bold tracking-widest uppercase mb-12">The Fortress of Champions. <span class="text-blue-400">Rule the game.</span></p>
         
         <div class="bg-slate-900/80 border border-blue-500/30 p-6 rounded-2xl inline-block backdrop-blur-sm">
             <p id="timer-label" class="text-blue-400 text-xs font-bold uppercase tracking-widest mb-2">TIME TO KICKOFF</p>
@@ -62,7 +65,16 @@
         </div>
 
         <div class="lg:col-span-2 space-y-4">
-            <h2 class="text-2xl font-black text-white tracking-wide border-b border-slate-800 pb-2"><i class="fa-solid fa-newspaper text-blue-500 mr-2"></i> Festival Updates</h2>
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center border-b border-slate-800 pb-2 gap-4">
+                <h2 class="text-2xl font-black text-white tracking-wide"><i class="fa-solid fa-satellite-dish text-blue-500 mr-2"></i> Live Updates</h2>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 md:pb-0">
+                    <button onclick="setFilter('All')" id="tab-All" class="update-tab active">All</button>
+                    <button onclick="setFilter('News')" id="tab-News" class="update-tab">News</button>
+                    <button onclick="setFilter('Fixture')" id="tab-Fixture" class="update-tab">Fixtures</button>
+                    <button onclick="setFilter('Score')" id="tab-Score" class="update-tab">Live Scores</button>
+                </div>
+            </div>
+            
             <div id="news-feed" class="space-y-4">
                 <div class="text-center py-10 text-slate-500 font-bold uppercase tracking-widest">Loading Updates...</div>
             </div>
@@ -100,27 +112,34 @@
             projectId: "nuesa-sport-festival-26",
             storageBucket: "nuesa-sport-festival-26.firebasestorage.app",
             messagingSenderId: "707147353888",
-            appId: "1:707147353888:web:770a7ec13bc19951f59145",
-            measurementId: "G-50PM5XYPG8"
+            appId: "1:707147353888:web:770a7ec13bc19951f59145"
         };
         const app = initializeApp(firebaseConfig); 
         const db = getFirestore(app);
 
-        // Timer Logic
         let targetDate = new Date().getTime();
+        let allUpdates = [];
+        let currentFilter = 'All';
+
+        window.setFilter = (filterName) => {
+            currentFilter = filterName;
+            document.querySelectorAll('.update-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${filterName}`).classList.add('active');
+            renderUpdates();
+        };
+
         onSnapshot(doc(db, "nuesa_fest_settings", "system"), (doc) => {
             if(doc.exists() && doc.data().targetDate) { targetDate = new Date(doc.data().targetDate).getTime(); }
         });
 
         setInterval(() => {
             const now = new Date().getTime(); const distance = targetDate - now;
-            if (distance < 0) { document.getElementById('countdown').innerHTML = "<div class='text-2xl font-black text-emerald-400 tracking-widest'>EVENT IS LIVE</div>"; return; }
+            if (distance < 0) { document.getElementById('countdown').innerHTML = "<div class='text-2xl font-black text-emerald-400 tracking-widest'>THE IMPERIUM HAS BEGUN</div>"; return; }
             document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
             document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
             document.getElementById("mins").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
         }, 1000);
 
-        // Real-time Medals
         onSnapshot(collection(db, "nuesa_fest_medals"), (snap) => {
             let medals = snap.docs.map(d => ({ id: d.id, ...d.data() }));
             medals.sort((a, b) => (b.gold || 0) - (a.gold || 0) || (b.silver || 0) - (a.silver || 0) || (b.bronze || 0) - (a.bronze || 0));
@@ -139,27 +158,40 @@
             document.getElementById('medal-table').innerHTML = html;
         });
 
-        // Real-time News
         const qNews = query(collection(db, "nuesa_fest_news"), orderBy("timestamp", "desc"));
         onSnapshot(qNews, (snap) => {
+            allUpdates = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderUpdates();
+        });
+
+        function renderUpdates() {
             let html = '';
-            snap.forEach(doc => {
-                const data = doc.data();
+            const filtered = currentFilter === 'All' ? allUpdates : allUpdates.filter(u => u.category === currentFilter);
+
+            filtered.forEach(data => {
+                let badge = '';
+                if(data.category === 'Score') badge = '<span class="bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded border border-red-700"><i class="fa-solid fa-circle-dot animate-pulse mr-1"></i> LIVE SCORE</span>';
+                else if(data.category === 'Fixture') badge = '<span class="bg-blue-600 text-white text-[9px] font-black px-2 py-1 rounded border border-blue-800"><i class="fa-regular fa-calendar mr-1"></i> FIXTURE</span>';
+                else badge = '<span class="bg-slate-600 text-slate-200 text-[9px] font-black px-2 py-1 rounded border border-slate-500">NEWS</span>';
+
                 html += `
                     <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg hover:border-blue-500/50 transition duration-300">
                         ${data.imageUrl ? `<img src="${data.imageUrl}" class="w-full h-48 object-cover">` : ''}
                         <div class="p-6">
-                            <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-2">${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : ''} | BY ${data.author}</p>
+                            <div class="flex justify-between items-start mb-3">
+                                ${badge}
+                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : ''} | BY ${data.author}</span>
+                            </div>
                             <h3 class="text-xl font-black text-white mb-2">${data.title}</h3>
                             <p class="text-sm text-slate-300 whitespace-pre-wrap">${data.body}</p>
                         </div>
                     </div>`;
             });
-            if(html === '') html = '<div class="text-center py-10 text-slate-500 font-bold uppercase tracking-widest">No recent updates.</div>';
+            
+            if(html === '') html = '<div class="text-center py-10 text-slate-500 font-bold uppercase tracking-widest">No recent updates in this category.</div>';
             document.getElementById('news-feed').innerHTML = html;
-        });
+        }
 
-        // Real-time Sponsors
         onSnapshot(collection(db, "nuesa_fest_sponsors"), (snap) => {
             let html = '';
             snap.forEach(doc => { html += `<img src="${doc.data().logoUrl}" alt="${doc.data().name}" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">`; });

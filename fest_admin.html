@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Festival Admin | NUESA 2026</title>
+    <title>Admin | NUESA FESTIVAL 2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -22,14 +22,11 @@
 <body class="flex flex-col min-h-screen">
 
     <div class="bg-black text-white py-2 px-4 flex justify-between items-center z-50 relative border-b border-slate-800">
-        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">OFFICIAL NUESA SPORTS PLATFORM</span>
-        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA SPORTS</span>
+        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">NUESA SPORT FESTIVAL 2.0 (DEAN'S CUP '26)</span>
+        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA FEST 2.0</span>
         <div class="flex space-x-4 text-slate-300 text-sm">
             <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="hover:text-pink-500 transition transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-500 transition transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://x.com/Ambassador30788" target="_blank" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://youtube.com/@theambassadorsport" target="_blank" class="hover:text-red-500 transition transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
             <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-500 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
     </div>
@@ -38,7 +35,7 @@
         <div class="bg-slate-800 p-8 max-w-sm w-full text-center rounded-2xl shadow-[0_0_40px_rgba(59,130,246,0.3)] border border-blue-500">
             <i class="fa-solid fa-crown text-5xl neon-blue mb-4"></i>
             <h2 class="text-3xl font-black text-white mb-1 tracking-wide">FESTIVAL ADMIN</h2>
-            <p class="text-xs text-slate-400 mb-6 font-bold tracking-widest uppercase">NUESA Sport Festival '26</p>
+            <p class="text-xs text-slate-400 mb-6 font-bold tracking-widest uppercase">The Imperium - Master Control</p>
             <input type="password" id="adm-pass" placeholder="ENTER SECURE PIN" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-4 text-center tracking-[0.3em] text-xl mb-4 focus:border-blue-500 outline-none uppercase font-black transition">
             <button onclick="checkLogin()" class="w-full bg-blue-600 text-white font-black tracking-widest py-4 rounded-lg hover:bg-blue-500 transition shadow-lg">AUTHORIZE</button>
             <p id="login-error" class="text-red-500 text-xs font-bold mt-4 hidden tracking-widest uppercase"><i class="fa-solid fa-triangle-exclamation"></i> INCORRECT PIN</p>
@@ -50,20 +47,22 @@
             <div class="flex items-center space-x-3 w-full md:w-auto justify-between">
                 <div class="flex items-center space-x-3">
                     <i class="fa-solid fa-crown text-blue-500 text-2xl"></i>
-                    <span class="text-xl font-black text-white tracking-tighter block">NUESA<span class="text-blue-500">ADMIN</span></span>
+                    <span class="text-xl font-black text-white tracking-tighter block">NUESA<span class="text-blue-500">ADMIN 2.0</span></span>
                 </div>
             </div>
             <div class="flex gap-2 overflow-x-auto w-full md:w-auto no-scrollbar pb-1 md:pb-0">
                 <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active whitespace-nowrap">DASHBOARD</button>
                 <button onclick="switchTab('rosters')" id="btn-rosters" class="nav-btn whitespace-nowrap">ROSTERS</button>
                 <button onclick="switchTab('medals')" id="btn-medals" class="nav-btn whitespace-nowrap">MEDALS</button>
-                <button onclick="switchTab('news')" id="btn-news" class="nav-btn whitespace-nowrap">NEWS</button>
+                <button onclick="switchTab('fixtures')" id="btn-fixtures" class="nav-btn whitespace-nowrap">FIXTURES</button>
+                <button onclick="switchTab('news')" id="btn-news" class="nav-btn whitespace-nowrap">UPDATES</button>
                 <button onclick="switchTab('sponsors')" id="btn-sponsors" class="nav-btn whitespace-nowrap">SPONSORS</button>
             </div>
         </div>
     </nav>
 
     <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full">
+        <!-- DASHBOARD TAB -->
         <div id="dashboard" class="section active space-y-6">
             <div class="flex justify-between items-center border-b border-slate-800 pb-4">
                 <h2 class="text-3xl font-black text-white tracking-wide">Control Center</h2>
@@ -100,24 +99,21 @@
             </div>
         </div>
 
+        <!-- ROSTERS TAB -->
         <div id="rosters" class="section space-y-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-4 gap-4">
                 <h2 class="text-3xl font-black text-white tracking-wide">Master Roster List</h2>
                 <select id="filter-dept" onchange="window.renderRosters()" class="bg-slate-800 text-white p-3 rounded-lg border border-slate-700 font-bold outline-none focus:border-blue-500 w-full md:w-auto">
                     <option value="ALL">All Departments</option>
-                    <option value="AESA">AESA</option>
-                    <option value="NAAES">NAAES</option>
-                    <option value="ULSESA">ULSESA</option>
-                    <option value="SSESA">SSESA</option>
-                    <option value="TVESA">TVESA</option>
-                    <option value="EFSA">EFSA</option>
-                    <option value="EMSA">EMSA</option>
-                    <option value="NAPHER-SD">NAPHER-SD</option>
+                    <option value="AESA">AESA</option><option value="NAAES">NAAES</option><option value="ULSESA">ULSESA</option>
+                    <option value="SSESA">SSESA</option><option value="TVESA">TVESA</option><option value="EFSA">EFSA</option>
+                    <option value="EMSA">EMSA</option><option value="NAPHER-SD">NAPHER-SD</option>
                 </select>
             </div>
             <div id="admin-rosters-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
+        <!-- MEDALS TAB -->
         <div id="medals" class="section space-y-6">
             <div class="border-b border-slate-800 pb-4">
                 <h2 class="text-3xl font-black text-white tracking-wide">Medal Table Manager</h2>
@@ -125,31 +121,112 @@
             <div id="medal-controls" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
+        <!-- FIXTURES TAB -->
+        <div id="fixtures" class="section space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-3xl font-black text-white tracking-wide">Match Fixtures Manager</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 md:col-span-1 h-fit">
+                    <h3 class="text-white font-black text-xl mb-4"><i class="fa-regular fa-calendar-plus text-blue-500 mr-2"></i> NEW FIXTURE</h3>
+                    <form id="fixtureForm" class="space-y-4">
+                        <select id="fSport" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none uppercase text-sm font-bold">
+                            <option value="" disabled selected>Select Sport Event</option>
+                            <optgroup label="BALL GAMES">
+                                <option value="Football">Football</option><option value="Volleyball">Volleyball</option>
+                                <option value="Handball">Handball</option><option value="Futsal">Futsal</option>
+                                <option value="Basketball">Basketball</option>
+                            </optgroup>
+                            <optgroup label="INDOOR GAMES">
+                                <option value="Table Tennis">Table Tennis</option><option value="Tennis">Tennis</option>
+                                <option value="Badminton">Badminton</option><option value="Ayo">Ayo</option>
+                                <option value="Scrabble">Scrabble</option><option value="Chess">Chess</option>
+                                <option value="Ludo">Ludo</option><option value="Efootball">Efootball</option>
+                                <option value="COD">COD</option>
+                            </optgroup>
+                            <optgroup label="ATHLETICS">
+                                <option value="Swimming">Swimming</option><option value="Walking-Race">Walking-Race</option>
+                                <option value="100m">100m</option><option value="200m">200m</option>
+                                <option value="400m">400m</option><option value="800m">800m</option>
+                                <option value="1500m">1500m</option><option value="4 x 100m">4 x 100m</option>
+                                <option value="4 x 400m Mix">4 x 400m Mix</option><option value="Long-Jump">Long-Jump</option>
+                            </optgroup>
+                        </select>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="fTeamA" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none uppercase text-sm font-bold">
+                                <option value="" disabled selected>Team A</option>
+                                <option value="ALL DEPARTMENTS">All Depts (Track)</option>
+                                <option value="AESA">AESA</option><option value="NAAES">NAAES</option><option value="ULSESA">ULSESA</option>
+                                <option value="SSESA">SSESA</option><option value="TVESA">TVESA</option><option value="EFSA">EFSA</option>
+                                <option value="EMSA">EMSA</option><option value="NAPHER-SD">NAPHER-SD</option>
+                            </select>
+                            <select id="fTeamB" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none uppercase text-sm font-bold">
+                                <option value="" disabled selected>Team B</option>
+                                <option value="N/A">- N/A -</option>
+                                <option value="AESA">AESA</option><option value="NAAES">NAAES</option><option value="ULSESA">ULSESA</option>
+                                <option value="SSESA">SSESA</option><option value="TVESA">TVESA</option><option value="EFSA">EFSA</option>
+                                <option value="EMSA">EMSA</option><option value="NAPHER-SD">NAPHER-SD</option>
+                            </select>
+                        </div>
+                        
+                        <!-- SIMPLIFIED STAGES -->
+                        <select id="fStage" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none uppercase text-sm font-bold">
+                            <option value="Knockout Stage">Knockout Stage</option>
+                            <option value="Semifinal">Semifinal</option>
+                            <option value="Final">Final</option>
+                        </select>
+                        
+                        <input type="datetime-local" id="fDate" required class="w-full bg-slate-900 border border-slate-600 text-slate-400 rounded p-3 outline-none text-sm font-bold">
+                        <input type="text" id="fVenue" required placeholder="Venue (e.g. SUB Pitch)" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none">
+                        
+                        <button type="submit" id="btnFixture" class="w-full bg-blue-600 text-white font-black py-3 rounded hover:bg-blue-500 transition tracking-widest uppercase">PUBLISH FIXTURE</button>
+                    </form>
+                </div>
+                <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <h3 class="text-white font-black text-xl mb-4 border-b border-slate-700 pb-2">Active Schedules</h3>
+                    <div id="fixtures-list" class="space-y-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEWS/UPDATES TAB -->
         <div id="news" class="section space-y-6">
             <div class="border-b border-slate-800 pb-4">
-                <h2 class="text-3xl font-black text-white tracking-wide">Live News Feed</h2>
+                <h2 class="text-3xl font-black text-white tracking-wide">Live Updates Feed</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 md:col-span-1 h-fit">
                     <h3 class="text-white font-black text-xl mb-4" id="news-form-title"><i class="fa-solid fa-bullhorn text-blue-500 mr-2"></i> POST UPDATE</h3>
                     <form id="newsForm" class="space-y-4">
                         <input type="hidden" id="nEditId" value="">
-                        <div><input type="text" id="nTitle" required placeholder="Headline" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
-                        <div><input type="text" id="nAuthor" required placeholder="Author" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
+                        
+                        <div>
+                            <select id="nCategory" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none font-bold uppercase text-sm">
+                                <option value="News">📰 General News</option>
+                                <option value="Score">🔴 Live Score</option>
+                            </select>
+                        </div>
+
+                        <div><input type="text" id="nTitle" required placeholder="Headline (e.g. AESA Wins Gold!)" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
+                        <div><input type="text" id="nAuthor" required placeholder="Author / Reporter" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
                         <div><input type="file" id="nImage" accept="image/*" class="w-full text-slate-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white cursor-pointer"></div>
-                        <div><textarea id="nBody" required placeholder="Write update..." rows="4" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></textarea></div>
+                        <div><textarea id="nBody" required placeholder="Write update or scores here..." rows="4" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></textarea></div>
+                        
                         <div class="flex gap-2">
-                            <button type="submit" id="btnNews" class="w-full bg-blue-600 text-white font-black py-3 rounded hover:bg-blue-500 transition">PUBLISH</button>
-                            <button type="button" onclick="window.cancelNewsEdit()" id="btnCancelNews" class="hidden w-1/3 bg-slate-700 text-white font-bold py-3 rounded hover:bg-slate-600 transition">CANCEL</button>
+                            <button type="submit" id="btnNews" class="w-full bg-blue-600 text-white font-black py-3 rounded hover:bg-blue-500 transition tracking-widest">PUBLISH</button>
+                            <button type="button" onclick="window.cancelNewsEdit()" id="btnCancelNews" class="hidden w-1/3 bg-slate-700 text-white font-bold py-3 rounded hover:bg-slate-600 transition tracking-widest">CANCEL</button>
                         </div>
                     </form>
                 </div>
                 <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <h3 class="text-white font-black text-xl mb-4 border-b border-slate-700 pb-2">News & Live Scores</h3>
                     <div id="news-list" class="space-y-4"></div>
                 </div>
             </div>
         </div>
 
+        <!-- SPONSORS TAB -->
         <div id="sponsors" class="section space-y-6">
             <div class="border-b border-slate-800 pb-4">
                 <h2 class="text-3xl font-black text-white tracking-wide">Sponsors & Partners</h2>
@@ -194,7 +271,6 @@
         import { getFirestore, collection, getDocs, doc, setDoc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        // ADD YOUR FIREBASE CONFIG HERE
         const firebaseConfig = {
             apiKey: "AIzaSyAr2aGfBXiQ2V9nx3stCHv51NQb83ATex4",
             authDomain: "nuesa-sport-festival-26.firebaseapp.com",
@@ -213,7 +289,7 @@
 
         window.fetchData = async () => { await fetchSystemSettings(); await fetchRosters(); await fetchMedals(); await fetchNews(); await fetchSponsors(); };
 
-        // --- SYSTEM SETTINGS ---
+        // --- DASHBOARD SETTINGS ---
         async function fetchSystemSettings() {
             const snap = await getDoc(doc(db, "nuesa_fest_settings", "system"));
             if(snap.exists()) {
@@ -244,7 +320,7 @@
             await setDoc(doc(db, "nuesa_fest_settings", "system"), { registrationGate: gateStatus }, { merge: true });
         };
 
-        // --- MASTER ROSTERS (With WhatsApp DM integration) ---
+        // --- ROSTERS ---
         async function fetchRosters() {
             const snap = await getDocs(collection(db, "nuesa_fest_rosters"));
             allRosters = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -266,26 +342,23 @@
                         <h3 class="text-white font-black text-xl mb-4 border-b border-slate-700 pb-2">${r.id} <span class="text-xs text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded ml-2">${r.players ? r.players.length : 0} Participants</span></h3>
                         <div class="max-h-64 overflow-y-auto space-y-2 custom-scrollbar pr-2">
                             ${r.players && r.players.length > 0 ? r.players.map(p => {
-                                // Format phone for WhatsApp API (Convert leading 0 to 234)
                                 const waNumber = p.phone ? p.phone.replace(/\\D/g, '').replace(/^0/, '234') : '';
-                                const waMsg = encodeURIComponent(`Hello ${p.name}, this is an official message regarding the NUESA Sport Festival '26.`);
-                                
+                                const waMsg = encodeURIComponent(`Hello ${p.name}, this is an official message regarding the NUESA Sport Festival 2.0 (Dean's Cup '26).`);
                                 return `
                                 <div class="text-sm font-semibold text-slate-300 bg-slate-900 p-2 rounded flex flex-col gap-1 border border-slate-700/50">
                                     <div class="flex items-center flex-wrap gap-2">
                                         <span class="text-white uppercase">${p.name}</span>
                                         ${p.role === 'Coach' ? `<span class="text-[10px] text-yellow-500 font-bold bg-yellow-900/30 px-1 rounded border border-yellow-900/50">COACH</span>` : `<span class="text-[10px] text-orange-400 font-bold bg-orange-900/30 px-1 rounded border border-orange-900/50">${p.level || 'N/A'}</span>`}
+                                        <span class="text-[10px] text-blue-400 font-mono bg-blue-900/30 px-1 rounded border border-blue-900/50" title="Receipt">${p.receipt || 'NO RECEIPT'}</span>
                                     </div>
                                     <div class="flex items-center flex-wrap gap-2 text-xs mt-1">
                                         <span class="text-slate-400 font-mono bg-slate-800 px-1 rounded border border-slate-700">${p.matric || 'NO MATRIC'}</span>
-                                        
                                         ${p.phone ? `
                                             <div class="flex items-center gap-1">
                                                 <span class="text-green-400 font-mono"><i class="fa-brands fa-whatsapp mr-1"></i>${p.phone}</span>
                                                 <a href="https://wa.me/${waNumber}?text=${waMsg}" target="_blank" class="bg-green-600 hover:bg-green-500 text-white text-[9px] px-1.5 py-0.5 rounded uppercase tracking-widest transition shadow-md"><i class="fa-solid fa-paper-plane mr-1"></i>DM</a>
                                             </div>
                                         ` : ''}
-                                        
                                         <span class="text-emerald-400 uppercase tracking-widest ml-auto text-[10px]">${p.sport}</span>
                                     </div>
                                 </div>`
@@ -295,7 +368,7 @@
             });
         };
 
-        // --- MEDAL MANAGER ---
+        // --- MEDALS ---
         async function fetchMedals() {
             const snap = await getDocs(collection(db, "nuesa_fest_medals"));
             medalData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -333,26 +406,93 @@
             }
         };
 
-        // --- NEWS MANAGER ---
+        // --- UPDATES & FIXTURES MANAGER ---
         async function fetchNews() {
             const snap = await getDocs(query(collection(db, "nuesa_fest_news"), orderBy("timestamp", "desc")));
-            const container = document.getElementById('news-list');
-            container.innerHTML = '';
+            const newsContainer = document.getElementById('news-list');
+            const fixContainer = document.getElementById('fixtures-list');
+            
+            newsContainer.innerHTML = '';
+            fixContainer.innerHTML = '';
+            
             snap.forEach(doc => {
                 const data = doc.data();
-                container.innerHTML += `
-                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 mb-2 flex gap-4">
-                        ${data.imageUrl ? `<img src="${data.imageUrl}" class="w-16 h-16 object-cover rounded">` : ''}
-                        <div>
-                            <h4 class="text-white font-black">${data.title}</h4>
-                            <div class="mt-2 flex gap-3">
-                                <button onclick="window.editNews('${doc.id}', \`${data.title.replace(/`/g, '\\`')}\`, \`${data.author.replace(/`/g, '\\`')}\`, \`${data.body.replace(/`/g, '\\`')}\`)" class="text-xs text-blue-400 font-bold">Edit</button>
-                                <button onclick="window.deleteNews('${doc.id}', '${data.imagePath || ''}')" class="text-xs text-red-500 font-bold">Delete</button>
+                
+                if (data.category === 'Fixture') {
+                    fixContainer.innerHTML += `
+                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 mb-2">
+                            <div class="flex justify-between items-start">
+                                <span class="bg-blue-600 text-white text-[9px] font-black px-2 py-1 rounded tracking-widest"><i class="fa-regular fa-calendar mr-1"></i>FIXTURE</span>
+                                <button onclick="window.deleteNews('${doc.id}', '')" class="text-red-500 hover:text-red-400 text-xs font-bold uppercase"><i class="fa-solid fa-trash mr-1"></i>Drop</button>
                             </div>
-                        </div>
-                    </div>`;
+                            <h4 class="text-white font-black mt-3 text-lg">${data.title}</h4>
+                            <p class="text-sm text-slate-400 whitespace-pre-wrap mt-1 leading-relaxed">${data.body}</p>
+                        </div>`;
+                } else {
+                    let badge = data.category === 'Score' ? '<span class="bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded">LIVE SCORE</span>' : '<span class="bg-slate-600 text-slate-200 text-[9px] font-black px-2 py-1 rounded">NEWS</span>';
+                    newsContainer.innerHTML += `
+                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 mb-2 flex gap-4">
+                            ${data.imageUrl ? `<img src="${data.imageUrl}" class="w-16 h-16 object-cover rounded">` : ''}
+                            <div class="w-full">
+                                <div class="mb-1">${badge}</div>
+                                <h4 class="text-white font-black">${data.title}</h4>
+                                <div class="mt-2 flex gap-3">
+                                    <button onclick="window.editNews('${doc.id}', \`${data.title.replace(/`/g, '\\`')}\`, \`${data.author.replace(/`/g, '\\`')}\`, \`${data.body.replace(/`/g, '\\`')}\`, '${data.category}')" class="text-xs text-blue-400 font-bold">Edit</button>
+                                    <button onclick="window.deleteNews('${doc.id}', '${data.imagePath || ''}')" class="text-xs text-red-500 font-bold">Delete</button>
+                                </div>
+                            </div>
+                        </div>`;
+                }
             });
+            
+            if(fixContainer.innerHTML === '') fixContainer.innerHTML = '<div class="text-sm text-slate-500 font-bold">No active fixtures.</div>';
+            if(newsContainer.innerHTML === '') newsContainer.innerHTML = '<div class="text-sm text-slate-500 font-bold">No news or live scores.</div>';
         }
+
+        // Handle Fixture Uploading
+        document.getElementById('fixtureForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnFixture'); 
+            btn.innerText = "PUBLISHING..."; btn.disabled = true;
+            
+            const sport = document.getElementById('fSport').value;
+            const teamA = document.getElementById('fTeamA').value;
+            const teamB = document.getElementById('fTeamB').value;
+            const stage = document.getElementById('fStage').value;
+            const dateRaw = document.getElementById('fDate').value;
+            const venue = document.getElementById('fVenue').value;
+
+            if (teamA !== "ALL DEPARTMENTS" && teamB !== "N/A" && teamA === teamB) {
+                alert("A department cannot play against itself. Please select two different teams.");
+                btn.innerText = "PUBLISH FIXTURE"; btn.disabled = false;
+                return;
+            }
+
+            const dateObj = new Date(dateRaw);
+            const formattedDate = dateObj.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+
+            let title = `${sport}: ${teamA} vs ${teamB}`;
+            if (teamA === "ALL DEPARTMENTS" || teamB === "N/A") {
+                title = `${sport} - ${stage}`;
+            }
+
+            const body = `🏆 Stage: ${stage}\n🕒 Time: ${formattedDate}\n📍 Venue: ${venue}`;
+
+            const postData = { 
+                title: title, 
+                author: "Admin Control", 
+                body: body,
+                category: "Fixture",
+                timestamp: serverTimestamp() 
+            };
+
+            await addDoc(collection(db, "nuesa_fest_news"), postData);
+            document.getElementById('fixtureForm').reset(); 
+            await fetchNews();
+            btn.innerText = "PUBLISH FIXTURE"; btn.disabled = false;
+        });
+
+        // Handle General News / Scores Uploading
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnNews'); btn.innerText = "PROCESSING..."; btn.disabled = true;
@@ -364,27 +504,35 @@
                 await uploadBytes(ref(storage, imagePath), file);
                 imageUrl = await getDownloadURL(ref(storage, imagePath));
             }
-            const postData = { title: document.getElementById('nTitle').value, author: document.getElementById('nAuthor').value, body: document.getElementById('nBody').value };
+            const postData = { 
+                title: document.getElementById('nTitle').value, 
+                author: document.getElementById('nAuthor').value, 
+                body: document.getElementById('nBody').value,
+                category: document.getElementById('nCategory').value 
+            };
             if (imageUrl) { postData.imageUrl = imageUrl; postData.imagePath = imagePath; }
             if (editId) { await updateDoc(doc(db, "nuesa_fest_news", editId), postData); } 
             else { postData.timestamp = serverTimestamp(); await addDoc(collection(db, "nuesa_fest_news"), postData); }
             document.getElementById('newsForm').reset(); window.cancelNewsEdit(); await fetchNews();
             btn.innerText = "PUBLISH"; btn.disabled = false;
         });
-        window.editNews = (id, title, author, body) => {
+
+        window.editNews = (id, title, author, body, category) => {
             document.getElementById('nEditId').value = id; document.getElementById('nTitle').value = title;
             document.getElementById('nAuthor').value = author; document.getElementById('nBody').value = body;
+            document.getElementById('nCategory').value = category || 'News';
             document.getElementById('btnNews').innerText = "UPDATE POST"; document.getElementById('btnCancelNews').classList.remove('hidden');
         };
         window.cancelNewsEdit = () => { document.getElementById('newsForm').reset(); document.getElementById('nEditId').value = ''; document.getElementById('btnNews').innerText = "PUBLISH"; document.getElementById('btnCancelNews').classList.add('hidden'); };
+        
         window.deleteNews = async (id, imagePath) => {
-            if(!confirm("Delete post?")) return;
+            if(!confirm("Are you sure you want to delete this post/fixture?")) return;
             await deleteDoc(doc(db, "nuesa_fest_news", id));
             if (imagePath && imagePath !== 'undefined') await deleteObject(ref(storage, imagePath)).catch(e=>console.log(e));
             await fetchNews();
         };
 
-        // --- SPONSORS MANAGER ---
+        // --- SPONSORS ---
         async function fetchSponsors() {
             const snap = await getDocs(collection(db, "nuesa_fest_sponsors"));
             const container = document.getElementById('sponsors-list');

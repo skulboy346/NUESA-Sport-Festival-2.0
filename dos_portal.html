@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOS Portal | NUESA 2026</title>
+    <title>DOS Portal | NUESA FESTIVAL 2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -17,14 +17,11 @@
 <body class="flex flex-col min-h-screen">
 
     <div class="bg-black text-white py-2 px-4 flex justify-between items-center z-50 relative border-b border-slate-800">
-        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">OFFICIAL NUESA SPORTS PLATFORM</span>
-        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA SPORTS</span>
+        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">NUESA SPORT FESTIVAL 2.0 (DEAN'S CUP '26)</span>
+        <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA FEST 2.0</span>
         <div class="flex space-x-4 text-slate-300 text-sm">
             <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="hover:text-pink-500 transition transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-500 transition transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://x.com/Ambassador30788" target="_blank" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://youtube.com/@theambassadorsport" target="_blank" class="hover:text-red-500 transition transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
             <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-500 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
     </div>
@@ -33,7 +30,7 @@
         <div class="bg-slate-800 p-8 max-w-sm w-full text-center rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.2)] border border-emerald-500">
             <i class="fa-solid fa-clipboard-user text-5xl neon-green mb-4"></i>
             <h2 class="text-3xl font-black text-white mb-1 tracking-wide">DOS PORTAL</h2>
-            <p class="text-xs text-slate-400 mb-6 font-bold tracking-widest uppercase">Team Registration</p>
+            <p class="text-xs text-slate-400 mb-6 font-bold tracking-widest uppercase">The Imperium - Registration</p>
             
             <select id="login-dept" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-4 text-center text-xl mb-4 focus:border-emerald-500 outline-none font-black transition">
                 <option value="" disabled selected>SELECT DEPARTMENT</option>
@@ -82,16 +79,17 @@
             <form id="addAthleteForm" class="space-y-4">
                 <input type="hidden" id="editIndex" value="-1">
                 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <input type="text" id="pName" required placeholder="Full Name" class="md:col-span-2 bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none focus:border-emerald-500 font-bold uppercase">
-                    <input type="text" id="pMatric" required placeholder="Matric No (e.g. 230314001)" maxlength="9" class="bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none focus:border-emerald-500 font-mono uppercase">
+                    <input type="text" id="pMatric" required placeholder="Matric No" maxlength="9" class="bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none focus:border-emerald-500 font-mono uppercase">
+                    <input type="text" id="pReceipt" required placeholder="NUESA Receipt (e.g. CUB_12345)" class="md:col-span-2 bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none focus:border-emerald-500 font-mono uppercase">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <select id="pLevel" required class="bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none focus:border-emerald-500 uppercase text-sm font-bold">
                         <option value="" disabled selected>Level</option>
                         <option value="100L">100L</option><option value="200L">200L</option><option value="300L">300L</option><option value="400L">400L</option>
                     </select>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <select id="pGender" required class="bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none focus:border-emerald-500 uppercase text-sm font-bold">
                         <option value="" disabled selected>Gender</option>
                         <option value="Male">Male</option><option value="Female">Female</option>
@@ -101,40 +99,25 @@
                         <option value="Athlete">Athlete / Player</option><option value="Coach">Coach</option>
                     </select>
                     <select id="pSport" required onchange="updateLimitTracker()" class="md:col-span-2 bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none focus:border-emerald-500 uppercase text-sm font-bold">
-                        <option value="" disabled selected>Select Event Category</option>
-                        <optgroup label="BALL GAMES (Coach Included in Limit)">
-                            <option value="Football">Football</option>
-                            <option value="Volleyball">Volleyball</option>
-                            <option value="Handball">Handball</option>
-                            <option value="Futsal">Futsal</option>
+                        <option value="" disabled selected>Select Event</option>
+                        <optgroup label="BALL GAMES">
+                            <option value="Football">Football</option><option value="Volleyball">Volleyball</option>
+                            <option value="Handball">Handball</option><option value="Futsal">Futsal</option>
                             <option value="Basketball">Basketball</option>
                         </optgroup>
-                        <optgroup label="INDOOR GAMES - Rackets">
-                            <option value="Table Tennis">Table Tennis</option>
-                            <option value="Tennis">Tennis</option>
-                            <option value="Badminton">Badminton</option>
+                        <optgroup label="INDOOR GAMES">
+                            <option value="Table Tennis">Table Tennis</option><option value="Tennis">Tennis</option>
+                            <option value="Badminton">Badminton</option><option value="Ayo">Ayo</option>
+                            <option value="Scrabble">Scrabble</option><option value="Chess">Chess</option>
+                            <option value="Ludo">Ludo</option><option value="Efootball">Efootball</option>
+                            <option value="COD">COD</option>
                         </optgroup>
-                        <optgroup label="INDOOR GAMES - Boards">
-                            <option value="Ayo">Ayo</option>
-                            <option value="Scrabble">Scrabble</option>
-                            <option value="Chess">Chess</option>
-                            <option value="Ludo">Ludo</option>
-                        </optgroup>
-                        <optgroup label="INDOOR GAMES - E-Sports">
-                            <option value="Efootball">Efootball</option>
-                            <option value="COD">COD (Call of Duty)</option>
-                        </optgroup>
-                        <optgroup label="ATHLETICS - Track & Field">
-                            <option value="Swimming">Swimming</option>
-                            <option value="Walking-Race">Walking-Race</option>
-                            <option value="100m">100m</option>
-                            <option value="200m">200m</option>
-                            <option value="400m">400m</option>
-                            <option value="800m">800m</option>
-                            <option value="1500m">1500m</option>
-                            <option value="4 x 100m">4 x 100m</option>
-                            <option value="4 x 400m Mix">4 x 400m Mix</option>
-                            <option value="Long-Jump">Long-Jump</option>
+                        <optgroup label="ATHLETICS">
+                            <option value="Swimming">Swimming</option><option value="Walking-Race">Walking-Race</option>
+                            <option value="100m">100m</option><option value="200m">200m</option>
+                            <option value="400m">400m</option><option value="800m">800m</option>
+                            <option value="1500m">1500m</option><option value="4 x 100m">4 x 100m</option>
+                            <option value="4 x 400m Mix">4 x 400m Mix</option><option value="Long-Jump">Long-Jump</option>
                         </optgroup>
                     </select>
                 </div>
@@ -164,14 +147,14 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // ADD YOUR FIREBASE CONFIG HERE
         const firebaseConfig = {
             apiKey: "AIzaSyAr2aGfBXiQ2V9nx3stCHv51NQb83ATex4",
             authDomain: "nuesa-sport-festival-26.firebaseapp.com",
             projectId: "nuesa-sport-festival-26",
             storageBucket: "nuesa-sport-festival-26.firebasestorage.app",
             messagingSenderId: "707147353888",
-            appId: "1:707147353888:web:770a7ec13bc19951f59145",
-            measurementId: "G-50PM5XYPG8"
+            appId: "1:707147353888:web:770a7ec13bc19951f59145"
         };
         const app = initializeApp(firebaseConfig); 
         const db = getFirestore(app);
@@ -180,36 +163,29 @@
         let rosterData = [];
         let isGateOpen = false;
 
-        // AUTH & VALIDATION CONSTANTS
         const deptPasswords = { "AESA": "AESA26", "NAAES": "NAAES26", "ULSESA": "ULSESA26", "SSESA": "SSESA26", "TVESA": "TEVES26", "EFSA": "EFSA26", "EMSA": "EMSA26", "NAPHER-SD": "NAPHER26" };
         const deptCodes = { "AESA": "0317", "NAAES": "0310", "ULSESA": "0310", "SSESA": "0323", "TVESA": "0319", "EFSA": "0305", "EMSA": "0302", "NAPHER-SD": "0314" };
+        const ballGames = ["Football", "Volleyball", "Handball", "Futsal", "Basketball"];
 
         const sportLimits = {
             "Football": { max: 21, maleMax: 21, femaleMax: 0 },
-            "Volleyball": { max: 12, minFemale: 1 },
-            "Handball": { max: 14, minFemale: 2 },
-            "Futsal": { max: 11, maleMax: 0, femaleMax: 11 },
-            "Basketball": { max: 12, minFemale: 1 },
+            "Volleyball": { max: 12, minFemale: 1 }, "Handball": { max: 14, minFemale: 2 },
+            "Futsal": { max: 11, maleMax: 0, femaleMax: 11 }, "Basketball": { max: 12, minFemale: 1 },
             "Table Tennis": { max: 2 }, "Tennis": { max: 3 }, "Badminton": { max: 2 },
             "Ayo": { max: 2 }, "Scrabble": { max: 2 }, "Chess": { max: 2 }, "Ludo": { max: 2 },
             "Efootball": { max: 2 }, "COD": { max: 4 },
-            "Swimming": { max: 2, maleMax: 1, femaleMax: 1 },
-            "Walking-Race": { max: 6, maleMax: 3, femaleMax: 3 },
-            "100m": { max: 4, maleMax: 2, femaleMax: 2 },
-            "200m": { max: 4, maleMax: 2, femaleMax: 2 },
-            "400m": { max: 4, maleMax: 2, femaleMax: 2 },
-            "800m": { max: 4, maleMax: 2, femaleMax: 2 },
-            "1500m": { max: 6, maleMax: 3, femaleMax: 3 },
-            "4 x 100m": { max: 8, maleMax: 4, femaleMax: 4 },
-            "4 x 400m Mix": { max: 4, maleMax: 2, femaleMax: 2 },
-            "Long-Jump": { max: 2, maleMax: 1, femaleMax: 1 }
+            "Swimming": { max: 2, maleMax: 1, femaleMax: 1 }, "Walking-Race": { max: 6, maleMax: 3, femaleMax: 3 },
+            "100m": { max: 4, maleMax: 2, femaleMax: 2 }, "200m": { max: 4, maleMax: 2, femaleMax: 2 },
+            "400m": { max: 4, maleMax: 2, femaleMax: 2 }, "800m": { max: 4, maleMax: 2, femaleMax: 2 },
+            "1500m": { max: 6, maleMax: 3, femaleMax: 3 }, "4 x 100m": { max: 8, maleMax: 4, femaleMax: 4 },
+            "4 x 400m Mix": { max: 4, maleMax: 2, femaleMax: 2 }, "Long-Jump": { max: 2, maleMax: 1, femaleMax: 1 }
         };
 
         onSnapshot(doc(db, "nuesa_fest_settings", "system"), (doc) => {
             if(doc.exists()) {
                 isGateOpen = doc.data().registrationGate === 'open';
                 document.getElementById('gate-warning').style.display = isGateOpen ? 'none' : 'block';
-                const inputs = ['pName', 'pMatric', 'pLevel', 'pGender', 'pRole', 'pPhone', 'pSport', 'btnAdd'];
+                const inputs = ['pName', 'pMatric', 'pReceipt', 'pLevel', 'pGender', 'pRole', 'pPhone', 'pSport', 'btnAdd'];
                 inputs.forEach(id => { document.getElementById(id).disabled = !isGateOpen; });
                 document.getElementById('btnAdd').className = isGateOpen ? "w-full bg-emerald-600 text-white font-black tracking-widest py-3 rounded hover:bg-emerald-500 transition shadow-lg" : "w-full bg-slate-600 text-slate-400 font-black tracking-widest py-3 rounded cursor-not-allowed";
                 renderRoster();
@@ -219,7 +195,6 @@
         window.loginDOS = async () => {
             const dept = document.getElementById('login-dept').value;
             const pin = document.getElementById('login-pin').value.trim().toUpperCase();
-            
             if(!dept || !pin) { document.getElementById('login-error').innerText = 'FILL ALL FIELDS'; document.getElementById('login-error').classList.remove('hidden'); return; }
             if(pin === deptPasswords[dept] || pin === 'NUESAADMIN26') {
                 currentDept = dept; document.getElementById('active-dept-label').innerText = dept; document.getElementById('login-modal').style.display = 'none'; await loadRoster();
@@ -243,11 +218,8 @@
             rosterData.forEach(p => { if(p.sport === sport) { count++; if(p.gender === 'Male') males++; else females++; }});
             
             let text = `${sport}: ${count}/${limits.max} Registered`;
-            if(limits.maleMax !== undefined || limits.femaleMax !== undefined) {
-                text += ` (M: ${males}/${limits.maleMax !== undefined ? limits.maleMax : 'Any'}, F: ${females}/${limits.femaleMax !== undefined ? limits.femaleMax : 'Any'})`;
-            } else if(limits.minFemale) {
-                text += ` (Min ${limits.minFemale} Female req. Currently: ${females})`;
-            }
+            if(limits.maleMax !== undefined || limits.femaleMax !== undefined) text += ` (M: ${males}/${limits.maleMax !== undefined ? limits.maleMax : 'Any'}, F: ${females}/${limits.femaleMax !== undefined ? limits.femaleMax : 'Any'})`;
+            else if(limits.minFemale) text += ` (Min ${limits.minFemale} Female req. Currently: ${females})`;
             document.getElementById('sport-limit-tracker').innerText = text;
         };
 
@@ -259,9 +231,7 @@
             if(rosterData.length === 0) { container.innerHTML = '<div class="text-center py-4 text-slate-500 font-bold uppercase tracking-widest">Roster is empty.</div>'; return; }
 
             const grouped = rosterData.reduce((acc, player) => {
-                if (!acc[player.sport]) acc[player.sport] = [];
-                acc[player.sport].push(player);
-                return acc;
+                if (!acc[player.sport]) acc[player.sport] = []; acc[player.sport].push(player); return acc;
             }, {});
 
             for (const [sport, players] of Object.entries(grouped)) {
@@ -278,13 +248,13 @@
                             ${players.map(player => {
                                 const originalIndex = rosterData.indexOf(player);
                                 return `
-                                <div class="flex flex-col md:flex-row justify-between md:items-center bg-slate-900/50 p-2 rounded hover:bg-slate-800 transition">
+                                <div class="flex flex-col md:flex-row justify-between md:items-center bg-slate-900/50 p-2 rounded hover:bg-slate-800 transition border border-slate-700/50">
                                     <div class="flex items-center flex-wrap gap-2">
                                         <span class="text-white font-bold uppercase text-sm">${player.name}</span> 
                                         ${player.role === 'Coach' ? `<span class="text-[10px] text-yellow-500 font-bold bg-yellow-900/30 px-1 rounded border border-yellow-900/50">COACH</span>` : `<span class="text-[10px] text-orange-400 font-bold bg-orange-900/30 px-1 rounded border border-orange-900/50">${player.level}</span>`}
-                                        <span class="text-[10px] text-slate-400 font-mono bg-slate-800 px-1 rounded border border-slate-600">${player.matric}</span>
+                                        <span class="text-[10px] text-blue-400 font-mono bg-blue-900/30 px-1 rounded border border-blue-900/50" title="Receipt">${player.receipt || 'NO RECEIPT'}</span>
+                                        <span class="text-[10px] text-slate-400 font-mono bg-slate-800 px-1 rounded border border-slate-600" title="Matric">${player.matric}</span>
                                         <span class="text-[10px] text-slate-500 uppercase">${player.gender === 'Male' ? 'M' : 'F'}</span>
-                                        ${player.phone ? `<span class="text-xs text-green-400 font-mono"><i class="fa-brands fa-whatsapp mr-1"></i>${player.phone}</span>` : ''}
                                     </div>
                                     ${isGateOpen ? `
                                     <div class="flex gap-3 justify-end items-center hide-on-print mt-2 md:mt-0">
@@ -304,19 +274,41 @@
 
             const editIndex = parseInt(document.getElementById('editIndex').value);
             const matricInput = document.getElementById('pMatric').value.trim().toUpperCase();
+            const receiptInput = document.getElementById('pReceipt').value.trim().toUpperCase();
             const requiredCode = deptCodes[currentDept];
             const sport = document.getElementById('pSport').value;
             const gender = document.getElementById('pGender').value;
             const role = document.getElementById('pRole').value;
 
-            if (role !== 'Coach') {
-                if (matricInput.length !== 9) { alert(`REGISTRATION FAILED:\nMatric Number must be exactly 9 characters long.`); return; }
-                if (!matricInput.includes(requiredCode)) { alert(`REGISTRATION FAILED:\nThe Matric Number must contain the code '${requiredCode}' for ${currentDept}.`); return; }
+            // SMART RECEIPT VALIDATION
+            if (role !== 'Coach' && !receiptInput.startsWith("CUB_")) {
+                alert(`REGISTRATION FAILED:\nThe NUESA Dues Receipt number MUST start with 'CUB_'.`); return;
+            }
+            const existingUsersWithReceipt = rosterData.filter((p, idx) => p.receipt === receiptInput && idx !== editIndex);
+            if (existingUsersWithReceipt.length > 0) {
+                const isSameAthlete = existingUsersWithReceipt.every(p => p.matric === matricInput);
+                if (!isSameAthlete) { alert(`REGISTRATION FAILED:\nReceipt ${receiptInput} is already registered to a different athlete.`); return; }
+                const alreadyInSport = existingUsersWithReceipt.find(p => p.sport === sport);
+                if (alreadyInSport) { alert(`REGISTRATION FAILED:\nThis athlete is already registered for ${sport}.`); return; }
             }
 
+            // MATRIC VALIDATION & 3-BALL GAME RULE
+            if (role !== 'Coach') {
+                if (matricInput.length !== 9) { alert(`REGISTRATION FAILED:\nMatric Number must be exactly 9 characters.`); return; }
+                if (!matricInput.includes(requiredCode)) { alert(`REGISTRATION FAILED:\nMatric Number must contain the code '${requiredCode}' for ${currentDept}.`); return; }
+                
+                if (ballGames.includes(sport)) {
+                    let ballGameCount = 0;
+                    rosterData.forEach((p, idx) => {
+                        if (p.matric === matricInput && idx !== editIndex && ballGames.includes(p.sport)) ballGameCount++;
+                    });
+                    if (ballGameCount >= 3) { alert(`REGISTRATION FAILED:\nAthlete is already registered for 3 Ball Games. Max allowed is 3.`); return; }
+                }
+            }
+
+            // LIMIT VALIDATION
             const limits = sportLimits[sport];
             let currentTotal = 0, currentMale = 0, currentFemale = 0;
-            
             rosterData.forEach((p, idx) => {
                 if (p.sport === sport && idx !== editIndex) {
                     currentTotal++;
@@ -328,16 +320,15 @@
             if (currentTotal >= limits.max) { alert(`LIMIT REACHED: ${sport} allows a max of ${limits.max} participants.`); return; }
             if (gender === 'Male' && limits.maleMax !== undefined && currentMale >= limits.maleMax) { alert(`LIMIT REACHED: ${sport} allows max ${limits.maleMax} Males.`); return; }
             if (gender === 'Female' && limits.femaleMax !== undefined && currentFemale >= limits.femaleMax) { alert(`LIMIT REACHED: ${sport} allows max ${limits.femaleMax} Females.`); return; }
-            
             if (gender === 'Male' && limits.minFemale !== undefined) {
                 const femalesNeeded = Math.max(0, limits.minFemale - currentFemale);
-                const slotsRemaining = limits.max - currentTotal;
-                if (slotsRemaining - 1 < femalesNeeded) { alert(`RESERVATION REQUIRED:\n${sport} requires minimum ${limits.minFemale} Female(s). You must save the remaining slots for females.`); return; }
+                if ((limits.max - currentTotal) - 1 < femalesNeeded) { alert(`RESERVATION REQUIRED:\n${sport} requires minimum ${limits.minFemale} Female(s). You must save the remaining slots.`); return; }
             }
 
             const athleteData = {
                 name: document.getElementById('pName').value.trim().toUpperCase(),
-                matric: matricInput, level: document.getElementById('pLevel').value,
+                matric: matricInput, receipt: receiptInput,
+                level: document.getElementById('pLevel').value,
                 gender: gender, role: role, sport: sport,
                 phone: document.getElementById('pPhone').value.trim()
             };
@@ -351,6 +342,7 @@
             if(!isGateOpen) return;
             const p = rosterData[index];
             document.getElementById('pName').value = p.name; document.getElementById('pMatric').value = p.matric;
+            document.getElementById('pReceipt').value = p.receipt || '';
             document.getElementById('pLevel').value = p.level || ''; document.getElementById('pGender').value = p.gender || '';
             document.getElementById('pRole').value = p.role || 'Athlete'; document.getElementById('pPhone').value = p.phone || '';
             document.getElementById('pSport').value = p.sport; document.getElementById('editIndex').value = index;
