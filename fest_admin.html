@@ -54,8 +54,8 @@
                 <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active whitespace-nowrap">DASHBOARD</button>
                 <button onclick="switchTab('rosters')" id="btn-rosters" class="nav-btn whitespace-nowrap">ROSTERS</button>
                 <button onclick="switchTab('medals')" id="btn-medals" class="nav-btn whitespace-nowrap">MEDALS</button>
-                <button onclick="switchTab('fixtures')" id="btn-fixtures" class="nav-btn whitespace-nowrap">FIXTURES</button>
-                <button onclick="switchTab('news')" id="btn-news" class="nav-btn whitespace-nowrap">UPDATES</button>
+                <button onclick="switchTab('fixtures')" id="btn-fixtures" class="nav-btn whitespace-nowrap">MATCHES/SCORES</button>
+                <button onclick="switchTab('news')" id="btn-news" class="nav-btn whitespace-nowrap">NEWS</button>
                 <button onclick="switchTab('sponsors')" id="btn-sponsors" class="nav-btn whitespace-nowrap">SPONSORS</button>
             </div>
         </div>
@@ -121,15 +121,17 @@
             <div id="medal-controls" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
-        <!-- FIXTURES TAB -->
+        <!-- FIXTURES & LIVE SCORES TAB -->
         <div id="fixtures" class="section space-y-6">
             <div class="border-b border-slate-800 pb-4">
-                <h2 class="text-3xl font-black text-white tracking-wide">Match Fixtures Manager</h2>
+                <h2 class="text-3xl font-black text-white tracking-wide">Match & Scoreboard Manager</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 md:col-span-1 h-fit">
-                    <h3 class="text-white font-black text-xl mb-4"><i class="fa-regular fa-calendar-plus text-blue-500 mr-2"></i> NEW FIXTURE</h3>
+                    <h3 class="text-white font-black text-xl mb-4" id="fixture-form-title"><i class="fa-regular fa-calendar-plus text-blue-500 mr-2"></i> CREATE MATCH</h3>
                     <form id="fixtureForm" class="space-y-4">
+                        <input type="hidden" id="fEditId" value="">
+                        
                         <select id="fSport" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none uppercase text-sm font-bold">
                             <option value="" disabled selected>Select Sport Event</option>
                             <optgroup label="BALL GAMES">
@@ -170,48 +172,55 @@
                             </select>
                         </div>
                         
-                        <!-- SIMPLIFIED STAGES -->
                         <select id="fStage" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none uppercase text-sm font-bold">
                             <option value="Knockout Stage">Knockout Stage</option>
                             <option value="Semifinal">Semifinal</option>
                             <option value="Final">Final</option>
                         </select>
                         
+                        <div class="bg-slate-900/50 p-3 rounded border border-slate-600">
+                            <label class="block text-xs font-bold text-slate-400 mb-2 uppercase">Match Status & Score</label>
+                            <select id="fStatus" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-2 outline-none uppercase text-sm font-bold mb-3">
+                                <option value="Upcoming">Upcoming Match</option>
+                                <option value="Live">Live / In-Play</option>
+                                <option value="Completed">Completed (FT)</option>
+                            </select>
+                            <div id="fScoresDiv" class="grid grid-cols-2 gap-2" style="display: none;">
+                                <input type="number" id="fScoreA" placeholder="Score A" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-2 outline-none text-center font-black">
+                                <input type="number" id="fScoreB" placeholder="Score B" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-2 outline-none text-center font-black">
+                            </div>
+                        </div>
+
                         <input type="datetime-local" id="fDate" required class="w-full bg-slate-900 border border-slate-600 text-slate-400 rounded p-3 outline-none text-sm font-bold">
                         <input type="text" id="fVenue" required placeholder="Venue (e.g. SUB Pitch)" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none">
                         
-                        <button type="submit" id="btnFixture" class="w-full bg-blue-600 text-white font-black py-3 rounded hover:bg-blue-500 transition tracking-widest uppercase">PUBLISH FIXTURE</button>
+                        <div class="flex gap-2">
+                            <button type="submit" id="btnFixture" class="w-full bg-blue-600 text-white font-black py-3 rounded hover:bg-blue-500 transition tracking-widest uppercase">PUBLISH</button>
+                            <button type="button" onclick="window.cancelFixtureEdit()" id="btnCancelFix" class="hidden w-1/3 bg-slate-700 text-white font-bold py-3 rounded hover:bg-slate-600 transition tracking-widest">CANCEL</button>
+                        </div>
                     </form>
                 </div>
                 <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <h3 class="text-white font-black text-xl mb-4 border-b border-slate-700 pb-2">Active Schedules</h3>
+                    <h3 class="text-white font-black text-xl mb-4 border-b border-slate-700 pb-2">Active Matches Dashboard</h3>
                     <div id="fixtures-list" class="space-y-3"></div>
                 </div>
             </div>
         </div>
 
-        <!-- NEWS/UPDATES TAB -->
+        <!-- NEWS TAB -->
         <div id="news" class="section space-y-6">
             <div class="border-b border-slate-800 pb-4">
-                <h2 class="text-3xl font-black text-white tracking-wide">Live Updates Feed</h2>
+                <h2 class="text-3xl font-black text-white tracking-wide">Live News Feed</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 md:col-span-1 h-fit">
-                    <h3 class="text-white font-black text-xl mb-4" id="news-form-title"><i class="fa-solid fa-bullhorn text-blue-500 mr-2"></i> POST UPDATE</h3>
+                    <h3 class="text-white font-black text-xl mb-4" id="news-form-title"><i class="fa-solid fa-bullhorn text-blue-500 mr-2"></i> POST NEWS</h3>
                     <form id="newsForm" class="space-y-4">
                         <input type="hidden" id="nEditId" value="">
-                        
-                        <div>
-                            <select id="nCategory" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none font-bold uppercase text-sm">
-                                <option value="News">📰 General News</option>
-                                <option value="Score">🔴 Live Score</option>
-                            </select>
-                        </div>
-
-                        <div><input type="text" id="nTitle" required placeholder="Headline (e.g. AESA Wins Gold!)" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
+                        <div><input type="text" id="nTitle" required placeholder="Headline (e.g. Opening Ceremony Info)" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
                         <div><input type="text" id="nAuthor" required placeholder="Author / Reporter" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
                         <div><input type="file" id="nImage" accept="image/*" class="w-full text-slate-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white cursor-pointer"></div>
-                        <div><textarea id="nBody" required placeholder="Write update or scores here..." rows="4" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></textarea></div>
+                        <div><textarea id="nBody" required placeholder="Write update here..." rows="4" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></textarea></div>
                         
                         <div class="flex gap-2">
                             <button type="submit" id="btnNews" class="w-full bg-blue-600 text-white font-black py-3 rounded hover:bg-blue-500 transition tracking-widest">PUBLISH</button>
@@ -220,7 +229,7 @@
                     </form>
                 </div>
                 <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <h3 class="text-white font-black text-xl mb-4 border-b border-slate-700 pb-2">News & Live Scores</h3>
+                    <h3 class="text-white font-black text-xl mb-4 border-b border-slate-700 pb-2">Published Articles</h3>
                     <div id="news-list" class="space-y-4"></div>
                 </div>
             </div>
@@ -271,6 +280,7 @@
         import { getFirestore, collection, getDocs, doc, setDoc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
+        // ADD YOUR FIREBASE CONFIG HERE
         const firebaseConfig = {
             apiKey: "AIzaSyAr2aGfBXiQ2V9nx3stCHv51NQb83ATex4",
             authDomain: "nuesa-sport-festival-26.firebaseapp.com",
@@ -289,7 +299,7 @@
 
         window.fetchData = async () => { await fetchSystemSettings(); await fetchRosters(); await fetchMedals(); await fetchNews(); await fetchSponsors(); };
 
-        // --- DASHBOARD SETTINGS ---
+        // --- DASHBOARD SETTINGS & FIX FOR TIMER ---
         async function fetchSystemSettings() {
             const snap = await getDoc(doc(db, "nuesa_fest_settings", "system"));
             if(snap.exists()) {
@@ -300,8 +310,15 @@
             updateGateUI();
         }
         window.updateLiveTimer = async () => {
-            await setDoc(doc(db, "nuesa_fest_settings", "system"), { targetDate: document.getElementById('admin-date').value }, { merge: true });
-            alert("Timer Updated & Synced!");
+            const dateInput = document.getElementById('admin-date').value;
+            if (!dateInput) { alert("⚠️ Please select a date and time from the calendar first!"); return; }
+            try {
+                await setDoc(doc(db, "nuesa_fest_settings", "system"), { targetDate: dateInput }, { merge: true });
+                alert("✅ Timer Successfully Updated & Synced across all pages!");
+            } catch (error) {
+                console.error("Firebase Error: ", error);
+                alert("❌ FAILED TO UPDATE: " + error.message + "\n\n(This usually means your Firestore Database Security Rules are blocking the update.)");
+            }
         };
         function updateGateUI() {
             const btn = document.getElementById('btn-gate');
@@ -406,30 +423,51 @@
             }
         };
 
-        // --- UPDATES & FIXTURES MANAGER ---
+        // --- UPDATES & SMART SCOREBOARDS ---
+        document.getElementById('fStatus').addEventListener('change', (e) => {
+            const scoreDiv = document.getElementById('fScoresDiv');
+            if(e.target.value === 'Upcoming') { scoreDiv.style.display = 'none'; } 
+            else { scoreDiv.style.display = 'grid'; }
+        });
+
         async function fetchNews() {
             const snap = await getDocs(query(collection(db, "nuesa_fest_news"), orderBy("timestamp", "desc")));
             const newsContainer = document.getElementById('news-list');
             const fixContainer = document.getElementById('fixtures-list');
             
-            newsContainer.innerHTML = '';
-            fixContainer.innerHTML = '';
+            newsContainer.innerHTML = ''; fixContainer.innerHTML = '';
             
             snap.forEach(doc => {
                 const data = doc.data();
                 
                 if (data.category === 'Fixture') {
+                    let scoreText = data.status === 'Upcoming' ? 'VS' : `${data.scoreA || 0} - ${data.scoreB || 0}`;
+                    let statusBadge = '';
+                    if(data.status === 'Live') statusBadge = '<span class="text-red-500 font-black text-[10px] animate-pulse">LIVE</span>';
+                    else if(data.status === 'Completed') statusBadge = '<span class="text-slate-400 font-black text-[10px]">FT</span>';
+                    else statusBadge = '<span class="text-blue-500 font-black text-[10px]">UPCOMING</span>';
+
                     fixContainer.innerHTML += `
-                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 mb-2">
-                            <div class="flex justify-between items-start">
-                                <span class="bg-blue-600 text-white text-[9px] font-black px-2 py-1 rounded tracking-widest"><i class="fa-regular fa-calendar mr-1"></i>FIXTURE</span>
-                                <button onclick="window.deleteNews('${doc.id}', '')" class="text-red-500 hover:text-red-400 text-xs font-bold uppercase"><i class="fa-solid fa-trash mr-1"></i>Drop</button>
+                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 mb-2 hover:border-slate-500 transition">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-blue-900/30 text-blue-400 text-[9px] font-black px-2 py-1 rounded tracking-widest uppercase border border-blue-900/50">${data.stage} • ${data.sport}</span>
+                                <div class="flex gap-2">
+                                    <button onclick="window.editFixture('${doc.id}', '${data.sport}', '${data.teamA}', '${data.teamB}', '${data.stage}', '${data.dateRaw}', '${data.venue}', '${data.status}', ${data.scoreA || 0}, ${data.scoreB || 0})" class="text-blue-500 hover:text-blue-400 text-xs font-bold uppercase"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="window.deleteNews('${doc.id}', '')" class="text-red-500 hover:text-red-400 text-xs font-bold uppercase"><i class="fa-solid fa-trash"></i></button>
+                                </div>
                             </div>
-                            <h4 class="text-white font-black mt-3 text-lg">${data.title}</h4>
-                            <p class="text-sm text-slate-400 whitespace-pre-wrap mt-1 leading-relaxed">${data.body}</p>
+                            <div class="flex justify-center items-center gap-4 py-2 bg-slate-800 rounded mt-2">
+                                <div class="w-1/3 text-right font-black text-white text-sm uppercase">${data.teamA}</div>
+                                <div class="text-lg font-black text-slate-300 bg-slate-900 px-3 rounded border border-slate-700">${scoreText}</div>
+                                <div class="w-1/3 text-left font-black text-white text-sm uppercase">${data.teamB}</div>
+                            </div>
+                            <div class="flex justify-between items-center mt-2 px-1">
+                                <span class="text-[10px] text-slate-500 font-bold"><i class="fa-solid fa-location-dot mr-1"></i>${data.venue}</span>
+                                ${statusBadge}
+                            </div>
                         </div>`;
                 } else {
-                    let badge = data.category === 'Score' ? '<span class="bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded">LIVE SCORE</span>' : '<span class="bg-slate-600 text-slate-200 text-[9px] font-black px-2 py-1 rounded">NEWS</span>';
+                    let badge = '<span class="bg-slate-700 text-slate-200 text-[9px] font-black px-2 py-1 rounded tracking-widest">NEWS</span>';
                     newsContainer.innerHTML += `
                         <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 mb-2 flex gap-4">
                             ${data.imageUrl ? `<img src="${data.imageUrl}" class="w-16 h-16 object-cover rounded">` : ''}
@@ -437,7 +475,7 @@
                                 <div class="mb-1">${badge}</div>
                                 <h4 class="text-white font-black">${data.title}</h4>
                                 <div class="mt-2 flex gap-3">
-                                    <button onclick="window.editNews('${doc.id}', \`${data.title.replace(/`/g, '\\`')}\`, \`${data.author.replace(/`/g, '\\`')}\`, \`${data.body.replace(/`/g, '\\`')}\`, '${data.category}')" class="text-xs text-blue-400 font-bold">Edit</button>
+                                    <button onclick="window.editNews('${doc.id}', \`${data.title.replace(/`/g, '\\`')}\`, \`${data.author.replace(/`/g, '\\`')}\`, \`${data.body.replace(/`/g, '\\`')}\`)" class="text-xs text-blue-400 font-bold">Edit</button>
                                     <button onclick="window.deleteNews('${doc.id}', '${data.imagePath || ''}')" class="text-xs text-red-500 font-bold">Delete</button>
                                 </div>
                             </div>
@@ -445,54 +483,72 @@
                 }
             });
             
-            if(fixContainer.innerHTML === '') fixContainer.innerHTML = '<div class="text-sm text-slate-500 font-bold">No active fixtures.</div>';
-            if(newsContainer.innerHTML === '') newsContainer.innerHTML = '<div class="text-sm text-slate-500 font-bold">No news or live scores.</div>';
+            if(fixContainer.innerHTML === '') fixContainer.innerHTML = '<div class="text-sm text-slate-500 font-bold text-center py-4 border border-dashed border-slate-700 rounded">No active fixtures. Create one above.</div>';
+            if(newsContainer.innerHTML === '') newsContainer.innerHTML = '<div class="text-sm text-slate-500 font-bold text-center py-4 border border-dashed border-slate-700 rounded">No published news.</div>';
         }
 
-        // Handle Fixture Uploading
+        // --- SUBMIT FIXTURE (New & Edit) ---
         document.getElementById('fixtureForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnFixture'); 
             btn.innerText = "PUBLISHING..."; btn.disabled = true;
             
+            const editId = document.getElementById('fEditId').value;
             const sport = document.getElementById('fSport').value;
             const teamA = document.getElementById('fTeamA').value;
             const teamB = document.getElementById('fTeamB').value;
             const stage = document.getElementById('fStage').value;
+            const status = document.getElementById('fStatus').value;
             const dateRaw = document.getElementById('fDate').value;
             const venue = document.getElementById('fVenue').value;
+            const scoreA = parseInt(document.getElementById('fScoreA').value) || 0;
+            const scoreB = parseInt(document.getElementById('fScoreB').value) || 0;
 
             if (teamA !== "ALL DEPARTMENTS" && teamB !== "N/A" && teamA === teamB) {
                 alert("A department cannot play against itself. Please select two different teams.");
-                btn.innerText = "PUBLISH FIXTURE"; btn.disabled = false;
-                return;
+                btn.innerText = "PUBLISH FIXTURE"; btn.disabled = false; return;
             }
 
             const dateObj = new Date(dateRaw);
             const formattedDate = dateObj.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
 
-            let title = `${sport}: ${teamA} vs ${teamB}`;
-            if (teamA === "ALL DEPARTMENTS" || teamB === "N/A") {
-                title = `${sport} - ${stage}`;
-            }
-
-            const body = `🏆 Stage: ${stage}\n🕒 Time: ${formattedDate}\n📍 Venue: ${venue}`;
-
             const postData = { 
-                title: title, 
-                author: "Admin Control", 
-                body: body,
-                category: "Fixture",
-                timestamp: serverTimestamp() 
+                category: "Fixture", sport: sport, teamA: teamA, teamB: teamB, 
+                stage: stage, status: status, scoreA: scoreA, scoreB: scoreB, 
+                dateRaw: dateRaw, formattedDate: formattedDate, venue: venue
             };
 
-            await addDoc(collection(db, "nuesa_fest_news"), postData);
-            document.getElementById('fixtureForm').reset(); 
-            await fetchNews();
-            btn.innerText = "PUBLISH FIXTURE"; btn.disabled = false;
+            if(editId) { await updateDoc(doc(db, "nuesa_fest_news", editId), postData); } 
+            else { postData.timestamp = serverTimestamp(); await addDoc(collection(db, "nuesa_fest_news"), postData); }
+            
+            window.cancelFixtureEdit(); await fetchNews();
+            btn.innerText = "PUBLISH"; btn.disabled = false;
         });
 
-        // Handle General News / Scores Uploading
+        // Populate Form to Edit a Fixture & Score
+        window.editFixture = (id, sport, teamA, teamB, stage, dateRaw, venue, status, scoreA, scoreB) => {
+            document.getElementById('fEditId').value = id; document.getElementById('fSport').value = sport;
+            document.getElementById('fTeamA').value = teamA; document.getElementById('fTeamB').value = teamB;
+            document.getElementById('fStage').value = stage; document.getElementById('fStatus').value = status;
+            document.getElementById('fDate').value = dateRaw; document.getElementById('fVenue').value = venue;
+            document.getElementById('fScoreA').value = scoreA; document.getElementById('fScoreB').value = scoreB;
+            
+            if(status !== 'Upcoming') document.getElementById('fScoresDiv').style.display = 'grid';
+            else document.getElementById('fScoresDiv').style.display = 'none';
+
+            document.getElementById('fixture-form-title').innerHTML = '<i class="fa-solid fa-pen text-blue-500 mr-2"></i> EDIT FIXTURE & SCORES';
+            document.getElementById('btnFixture').innerText = "UPDATE FIXTURE"; document.getElementById('btnCancelFix').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.cancelFixtureEdit = () => { 
+            document.getElementById('fixtureForm').reset(); document.getElementById('fEditId').value = ''; 
+            document.getElementById('fScoresDiv').style.display = 'none';
+            document.getElementById('fixture-form-title').innerHTML = '<i class="fa-regular fa-calendar-plus text-blue-500 mr-2"></i> NEW FIXTURE';
+            document.getElementById('btnFixture').innerText = "PUBLISH"; document.getElementById('btnCancelFix').classList.add('hidden'); 
+        };
+
+        // --- GENERAL NEWS ---
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnNews'); btn.innerText = "PROCESSING..."; btn.disabled = true;
@@ -500,33 +556,34 @@
             const file = document.getElementById('nImage').files[0];
             let imageUrl = null, imagePath = null;
             if (file) {
-                imagePath = `news_images/${Date.now()}_${file.name}`;
-                await uploadBytes(ref(storage, imagePath), file);
+                imagePath = `news_images/${Date.now()}_${file.name}`; await uploadBytes(ref(storage, imagePath), file);
                 imageUrl = await getDownloadURL(ref(storage, imagePath));
             }
-            const postData = { 
-                title: document.getElementById('nTitle').value, 
-                author: document.getElementById('nAuthor').value, 
-                body: document.getElementById('nBody').value,
-                category: document.getElementById('nCategory').value 
-            };
+            const postData = { title: document.getElementById('nTitle').value, author: document.getElementById('nAuthor').value, body: document.getElementById('nBody').value, category: "News" };
             if (imageUrl) { postData.imageUrl = imageUrl; postData.imagePath = imagePath; }
+            
             if (editId) { await updateDoc(doc(db, "nuesa_fest_news", editId), postData); } 
             else { postData.timestamp = serverTimestamp(); await addDoc(collection(db, "nuesa_fest_news"), postData); }
+            
             document.getElementById('newsForm').reset(); window.cancelNewsEdit(); await fetchNews();
             btn.innerText = "PUBLISH"; btn.disabled = false;
         });
 
-        window.editNews = (id, title, author, body, category) => {
+        window.editNews = (id, title, author, body) => {
             document.getElementById('nEditId').value = id; document.getElementById('nTitle').value = title;
             document.getElementById('nAuthor').value = author; document.getElementById('nBody').value = body;
-            document.getElementById('nCategory').value = category || 'News';
+            document.getElementById('news-form-title').innerHTML = '<i class="fa-solid fa-pen text-blue-500 mr-2"></i> EDIT NEWS';
             document.getElementById('btnNews').innerText = "UPDATE POST"; document.getElementById('btnCancelNews').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-        window.cancelNewsEdit = () => { document.getElementById('newsForm').reset(); document.getElementById('nEditId').value = ''; document.getElementById('btnNews').innerText = "PUBLISH"; document.getElementById('btnCancelNews').classList.add('hidden'); };
-        
+        window.cancelNewsEdit = () => { 
+            document.getElementById('newsForm').reset(); document.getElementById('nEditId').value = ''; 
+            document.getElementById('news-form-title').innerHTML = '<i class="fa-solid fa-bullhorn text-blue-500 mr-2"></i> POST NEWS';
+            document.getElementById('btnNews').innerText = "PUBLISH"; document.getElementById('btnCancelNews').classList.add('hidden'); 
+        };
+
         window.deleteNews = async (id, imagePath) => {
-            if(!confirm("Are you sure you want to delete this post/fixture?")) return;
+            if(!confirm("Are you sure you want to delete this?")) return;
             await deleteDoc(doc(db, "nuesa_fest_news", id));
             if (imagePath && imagePath !== 'undefined') await deleteObject(ref(storage, imagePath)).catch(e=>console.log(e));
             await fetchNews();
