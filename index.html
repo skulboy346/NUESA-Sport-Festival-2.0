@@ -17,12 +17,16 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
+    <!-- UNIFIED TOP BAR -->
     <div class="bg-black text-white py-2 px-4 flex justify-between items-center z-50 relative border-b border-slate-800">
         <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">OFFICIAL NUESA SPORTS PLATFORM</span>
         <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA SPORTS</span>
-        <div class="flex space-x-4 text-slate-300 text-sm">
+        <div class="flex space-x-3 md:space-x-4 text-slate-300 text-sm md:text-base">
             <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="hover:text-pink-500 transition transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-500 transition transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://x.com/Ambassador30788" target="_blank" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://youtube.com/@theambassadorsport" target="_blank" class="hover:text-red-500 transition transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
             <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-500 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
     </div>
@@ -86,9 +90,12 @@
             <div id="sponsors-grid" class="flex flex-wrap justify-center gap-8 items-center opacity-70 hover:opacity-100 transition mb-12"></div>
             <div class="border-t border-slate-800 pt-8 flex flex-col items-center">
                 <p class="text-slate-400 text-xs font-bold tracking-widest uppercase mb-4">Follow The Festival</p>
-                <div class="flex gap-6">
+                <div class="flex gap-6 justify-center">
                     <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="text-slate-500 hover:text-pink-500 text-2xl transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="text-slate-500 hover:text-blue-500 text-2xl transition"><i class="fa-brands fa-facebook"></i></a>
                     <a href="https://x.com/Ambassador30788" target="_blank" class="text-slate-500 hover:text-white text-2xl transition"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="text-slate-500 hover:text-pink-600 text-2xl transition"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://youtube.com/@theambassadorsport" target="_blank" class="text-slate-500 hover:text-red-500 text-2xl transition"><i class="fa-brands fa-youtube"></i></a>
                     <a href="https://wa.me/2348113032943" target="_blank" class="text-slate-500 hover:text-green-500 text-2xl transition"><i class="fa-brands fa-whatsapp"></i></a>
                 </div>
             </div>
@@ -169,7 +176,6 @@
 
             filtered.forEach(data => {
                 if (data.category === 'Fixture') {
-                    // SCOREBOARD RENDER LOGIC
                     let scoreUI = '';
                     let badge = '';
 
@@ -202,7 +208,6 @@
                             </div>
                         </div>`;
                 } else {
-                    // STANDARD NEWS RENDER LOGIC
                     let badge = '<span class="bg-slate-700 text-slate-200 text-[9px] font-black px-2 py-1 rounded tracking-widest">NEWS</span>';
                     html += `
                         <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg hover:border-blue-500/50 transition duration-300">

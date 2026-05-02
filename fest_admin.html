@@ -21,12 +21,16 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
+    <!-- UNIFIED TOP BAR -->
     <div class="bg-black text-white py-2 px-4 flex justify-between items-center z-50 relative border-b border-slate-800">
         <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">NUESA SPORT FESTIVAL 2.0 (DEAN'S CUP '26)</span>
         <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA FEST 2.0</span>
-        <div class="flex space-x-4 text-slate-300 text-sm">
+        <div class="flex space-x-3 md:space-x-4 text-slate-300 text-sm md:text-base">
             <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="hover:text-pink-500 transition transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-500 transition transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://x.com/Ambassador30788" target="_blank" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://youtube.com/@theambassadorsport" target="_blank" class="hover:text-red-500 transition transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
             <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-500 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
     </div>
@@ -217,6 +221,13 @@
                     <h3 class="text-white font-black text-xl mb-4" id="news-form-title"><i class="fa-solid fa-bullhorn text-blue-500 mr-2"></i> POST NEWS</h3>
                     <form id="newsForm" class="space-y-4">
                         <input type="hidden" id="nEditId" value="">
+                        
+                        <div>
+                            <select id="nCategory" required class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none font-bold uppercase text-sm">
+                                <option value="News">📰 General News</option>
+                            </select>
+                        </div>
+
                         <div><input type="text" id="nTitle" required placeholder="Headline (e.g. Opening Ceremony Info)" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
                         <div><input type="text" id="nAuthor" required placeholder="Author / Reporter" class="w-full bg-slate-900 border border-slate-600 text-white rounded p-3 outline-none"></div>
                         <div><input type="file" id="nImage" accept="image/*" class="w-full text-slate-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white cursor-pointer"></div>
@@ -287,8 +298,7 @@
             projectId: "nuesa-sport-festival-26",
             storageBucket: "nuesa-sport-festival-26.firebasestorage.app",
             messagingSenderId: "707147353888",
-            appId: "1:707147353888:web:770a7ec13bc19951f59145",
-            measurementId: "G-50PM5XYPG8"
+            appId: "1:707147353888:web:770a7ec13bc19951f59145"
         };
         const app = initializeApp(firebaseConfig); 
         const db = getFirestore(app);
@@ -475,7 +485,7 @@
                                 <div class="mb-1">${badge}</div>
                                 <h4 class="text-white font-black">${data.title}</h4>
                                 <div class="mt-2 flex gap-3">
-                                    <button onclick="window.editNews('${doc.id}', \`${data.title.replace(/`/g, '\\`')}\`, \`${data.author.replace(/`/g, '\\`')}\`, \`${data.body.replace(/`/g, '\\`')}\`)" class="text-xs text-blue-400 font-bold">Edit</button>
+                                    <button onclick="window.editNews('${doc.id}', \`${data.title.replace(/`/g, '\\`')}\`, \`${data.author.replace(/`/g, '\\`')}\`, \`${data.body.replace(/`/g, '\\`')}\`, '${data.category}')" class="text-xs text-blue-400 font-bold">Edit</button>
                                     <button onclick="window.deleteNews('${doc.id}', '${data.imagePath || ''}')" class="text-xs text-red-500 font-bold">Delete</button>
                                 </div>
                             </div>
