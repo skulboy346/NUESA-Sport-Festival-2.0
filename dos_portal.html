@@ -16,7 +16,6 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- UNIFIED TOP BAR -->
     <div class="bg-black text-white py-2 px-4 flex justify-between items-center z-50 relative border-b border-slate-800">
         <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">NUESA SPORT FESTIVAL 2.0 (DEAN'S CUP '26)</span>
         <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA FEST 2.0</span>
@@ -62,7 +61,7 @@
                 <span class="text-xl font-black text-white tracking-tighter block">DOS<span class="text-emerald-500">PORTAL</span></span>
             </div>
             <div class="flex gap-3">
-                <button onclick="downloadRosterPDF()" class="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded border border-slate-700 hover:bg-slate-700 transition uppercase tracking-widest"><i class="fa-solid fa-file-pdf text-red-400 mr-1"></i> PDF</button>
+                <button onclick="downloadRosterPDF()" class="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded border border-slate-700 hover:bg-slate-700 transition uppercase tracking-widest shadow-md"><i class="fa-solid fa-file-pdf text-red-400 mr-1"></i> MASTER PDF</button>
                 <div id="active-dept-label" class="text-slate-400 font-bold tracking-widest uppercase bg-slate-800 px-3 py-2 rounded"></div>
             </div>
         </div>
@@ -144,9 +143,19 @@
         </div>
 
         <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl" id="roster-print-area">
+            
+            <div id="print-letterhead" class="text-center border-b-2 border-slate-600 pb-4 mb-6" style="display: none;">
+                <div class="flex justify-center items-center gap-3 mb-2">
+                    <i class="fa-solid fa-crown text-emerald-500 text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-black text-white tracking-widest uppercase mb-1">NUESA SPORTS FESTIVAL</h1>
+                <h2 class="text-xl font-bold text-emerald-500 tracking-[0.2em] uppercase">THE IMPERIUM</h2>
+                <p class="text-[10px] text-slate-400 mt-2 uppercase tracking-widest font-bold">Official Dean's Cup '26 Roster Document</p>
+            </div>
+
             <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
-                <h2 class="text-2xl font-black text-white">Official Roster</h2>
-                <span id="roster-count" class="bg-emerald-900/30 text-emerald-400 px-3 py-1 rounded text-xs font-bold border border-emerald-900/50">0 Participants</span>
+                <h2 class="text-2xl font-black text-white" id="roster-header-title">Official Roster</h2>
+                <span id="roster-count" class="bg-emerald-900/30 text-emerald-400 px-3 py-1 rounded text-xs font-bold border border-emerald-900/50 hide-on-print">0 Participants</span>
             </div>
             <div id="roster-list" class="space-y-4">
                 <div class="text-center py-10 text-slate-500 font-bold">Loading Roster...</div>
@@ -176,7 +185,18 @@
         let isGateOpen = false;
 
         const deptPasswords = { "AESA": "AESA26", "NAAES": "NAAES26", "ULSESA": "ULSESA26", "SSESA": "SSESA26", "TVESA": "TEVES26", "EFSA": "EFSA26", "EMSA": "EMSA26", "NAPHER-SD": "NAPHER26" };
-        const deptCodes = { "AESA": "0317", "NAAES": "0310", "ULSESA": "0310", "SSESA": "0323", "TVESA": "0319", "EFSA": "0305", "EMSA": "0302", "NAPHER-SD": "0314" };
+        
+        // Corrected Dept Codes mapped to arrays
+        const deptCodes = { 
+            "AESA": ["0317"], 
+            "NAAES": ["0301"], 
+            "ULSESA": ["0310"], 
+            "SSESA": ["0323"], 
+            "TVESA": ["0319"], 
+            "EFSA": ["0305", "0324"], // FIXED HERE
+            "EMSA": ["0302"], 
+            "NAPHER-SD": ["0314"] 
+        };
         const ballGames = ["Football", "Volleyball", "Handball", "Futsal", "Basketball"];
 
         const sportLimits = {
@@ -251,10 +271,13 @@
                 players.forEach(p => { if(p.gender === 'Male') mCount++; else fCount++; if(p.role === 'Coach') cCount++; });
                 
                 container.innerHTML += `
-                    <div class="bg-slate-900 rounded-lg border border-slate-700 overflow-hidden">
+                    <div class="bg-slate-900 rounded-lg border border-slate-700 overflow-hidden sport-group" data-sport="${sport}">
                         <div class="bg-slate-800 px-4 py-2 flex justify-between items-center border-b border-slate-700">
                             <span class="text-sm text-white font-black uppercase tracking-widest">${sport}</span>
-                            <span class="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Total: ${players.length} (M:${mCount} F:${fCount} Coaches:${cCount})</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[10px] text-slate-400 font-bold tracking-widest uppercase hide-on-print">Total: ${players.length} (M:${mCount} F:${fCount} C:${cCount})</span>
+                                <button onclick="window.downloadSportPDF('${sport}')" class="hide-on-print text-red-400 hover:text-red-300 transition bg-red-900/20 px-2 py-1 rounded border border-red-900/50" title="Download ${sport} PDF"><i class="fa-solid fa-file-pdf"></i></button>
+                            </div>
                         </div>
                         <div class="p-2 space-y-1">
                             ${players.map(player => {
@@ -287,12 +310,11 @@
             const editIndex = parseInt(document.getElementById('editIndex').value);
             const matricInput = document.getElementById('pMatric').value.trim().toUpperCase();
             const receiptInput = document.getElementById('pReceipt').value.trim().toUpperCase();
-            const requiredCode = deptCodes[currentDept];
+            const requiredCodes = deptCodes[currentDept]; 
             const sport = document.getElementById('pSport').value;
             const gender = document.getElementById('pGender').value;
             const role = document.getElementById('pRole').value;
 
-            // SMART RECEIPT VALIDATION
             if (role !== 'Coach' && !receiptInput.startsWith("CUB_")) {
                 alert(`REGISTRATION FAILED:\nThe NUESA Dues Receipt number MUST start with 'CUB_'.`); return;
             }
@@ -304,10 +326,14 @@
                 if (alreadyInSport) { alert(`REGISTRATION FAILED:\nThis athlete is already registered for ${sport}.`); return; }
             }
 
-            // MATRIC VALIDATION & 3-BALL GAME RULE
             if (role !== 'Coach') {
                 if (matricInput.length !== 9) { alert(`REGISTRATION FAILED:\nMatric Number must be exactly 9 characters.`); return; }
-                if (!matricInput.includes(requiredCode)) { alert(`REGISTRATION FAILED:\nMatric Number must contain the code '${requiredCode}' for ${currentDept}.`); return; }
+                
+                const isValidMatric = requiredCodes.some(code => matricInput.includes(code));
+                if (!isValidMatric) { 
+                    alert(`REGISTRATION FAILED:\nMatric Number must contain the valid code(s) [${requiredCodes.join(' or ')}] for ${currentDept}.`); 
+                    return; 
+                }
                 
                 if (ballGames.includes(sport)) {
                     let ballGameCount = 0;
@@ -318,7 +344,6 @@
                 }
             }
 
-            // LIMIT VALIDATION
             const limits = sportLimits[sport];
             let currentTotal = 0, currentMale = 0, currentFemale = 0;
             rosterData.forEach((p, idx) => {
@@ -379,10 +404,72 @@
             if(parseInt(document.getElementById('editIndex').value) === index) window.cancelEdit();
         };
 
-        window.downloadRosterPDF = () => {
-            const buttons = document.querySelectorAll('.hide-on-print'); buttons.forEach(b => b.style.display = 'none');
+        // Print individual sport PDF
+        window.downloadSportPDF = (targetSport) => {
+            const letterhead = document.getElementById('print-letterhead');
+            const buttons = document.querySelectorAll('.hide-on-print'); 
+            
+            // Show letterhead & hide buttons
+            letterhead.style.display = 'block';
+            buttons.forEach(b => b.style.display = 'none');
+            
+            // Hide all other sports
+            const allGroups = document.querySelectorAll('.sport-group');
+            allGroups.forEach(group => {
+                if(group.getAttribute('data-sport') !== targetSport) {
+                    group.style.display = 'none';
+                }
+            });
+
+            const titleEl = document.getElementById('roster-header-title');
+            const originalTitle = titleEl.innerText;
+            titleEl.innerText = `${currentDept} - ${targetSport.toUpperCase()}`;
+
             const element = document.getElementById('roster-print-area');
-            html2pdf().set({ margin: 0.5, filename: `NUESA_FEST26_${currentDept}_ROSTER.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0f172a' }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(element).save().then(() => { buttons.forEach(b => b.style.display = 'flex'); });
+            const formattedSport = targetSport.replace(/\s+/g, '_').toUpperCase();
+
+            html2pdf().set({ 
+                margin: 0.5, 
+                filename: `NUESA_FEST26_${currentDept}_${formattedSport}.pdf`, 
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0f172a' }, 
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
+            }).from(element).save().then(() => { 
+                // Restore Everything
+                letterhead.style.display = 'none';
+                buttons.forEach(b => b.style.display = ''); 
+                allGroups.forEach(group => group.style.display = ''); 
+                titleEl.innerText = originalTitle;
+            });
+        };
+
+        // Print Master Roster PDF
+        window.downloadRosterPDF = () => {
+            const letterhead = document.getElementById('print-letterhead');
+            const buttons = document.querySelectorAll('.hide-on-print'); 
+            
+            // Show letterhead & hide buttons
+            letterhead.style.display = 'block';
+            buttons.forEach(b => b.style.display = 'none');
+            
+            const titleEl = document.getElementById('roster-header-title');
+            const originalTitle = titleEl.innerText;
+            titleEl.innerText = `${currentDept} - MASTER ROSTER`;
+
+            const element = document.getElementById('roster-print-area');
+            
+            html2pdf().set({ 
+                margin: 0.5, 
+                filename: `NUESA_FEST26_${currentDept}_MASTER_ROSTER.pdf`, 
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0f172a' }, 
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
+            }).from(element).save().then(() => { 
+                // Restore Everything
+                letterhead.style.display = 'none';
+                buttons.forEach(b => b.style.display = ''); 
+                titleEl.innerText = originalTitle;
+            });
         };
     </script>
 </body>
