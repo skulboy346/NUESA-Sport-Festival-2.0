@@ -325,6 +325,7 @@
             if(!isGateOpen) return;
 
             const editIndex = parseInt(document.getElementById('editIndex').value);
+            const inputName = document.getElementById('pName').value.trim().toUpperCase();
             const matricInput = document.getElementById('pMatric').value.trim().toUpperCase();
             const receiptInput = document.getElementById('pReceipt').value.trim().toUpperCase();
             const requiredCodes = deptCodes[currentDept]; 
@@ -332,13 +333,25 @@
             const gender = document.getElementById('pGender').value;
             const role = document.getElementById('pRole').value;
 
+            // STRICT MULTI-SPORT RECEIPT VALIDATION
             if (role !== 'Coach' && !receiptInput.startsWith("CUB_")) {
                 alert(`REGISTRATION FAILED:\nThe NUESA Dues Receipt number MUST start with 'CUB_'.`); return;
             }
+            
             const existingUsersWithReceipt = rosterData.filter((p, idx) => p.receipt === receiptInput && idx !== editIndex);
             if (existingUsersWithReceipt.length > 0) {
-                const isSameAthlete = existingUsersWithReceipt.every(p => p.matric === matricInput);
-                if (!isSameAthlete) { alert(`REGISTRATION FAILED:\nReceipt ${receiptInput} is already registered to a different athlete.`); return; }
+                const referenceAthlete = existingUsersWithReceipt[0];
+                
+                if (referenceAthlete.matric !== matricInput) { 
+                    alert(`REGISTRATION FAILED:\nReceipt ${receiptInput} is already linked to Matric No: ${referenceAthlete.matric}.`); return; 
+                }
+                if (referenceAthlete.name !== inputName) {
+                    alert(`REGISTRATION FAILED:\nReceipt ${receiptInput} is already linked to Name: ${referenceAthlete.name}. Details must match exactly.`); return;
+                }
+                if (referenceAthlete.gender !== gender) {
+                    alert(`REGISTRATION FAILED:\nGender mismatch with the original registration for this receipt.`); return;
+                }
+
                 const alreadyInSport = existingUsersWithReceipt.find(p => p.sport === sport);
                 if (alreadyInSport) { alert(`REGISTRATION FAILED:\nThis athlete is already registered for ${sport}.`); return; }
             }
@@ -380,7 +393,7 @@
             }
 
             const athleteData = {
-                name: document.getElementById('pName').value.trim().toUpperCase(),
+                name: inputName,
                 matric: matricInput, receipt: receiptInput,
                 level: document.getElementById('pLevel').value,
                 gender: gender, role: role, sport: sport,
