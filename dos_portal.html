@@ -35,21 +35,23 @@
             <h2 class="text-3xl font-black text-white mb-1 tracking-wide">DOS PORTAL</h2>
             <p class="text-xs text-slate-400 mb-6 font-bold tracking-widest uppercase">The Imperium - Registration</p>
             
-            <select id="login-dept" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-4 text-center text-xl mb-4 focus:border-emerald-500 outline-none font-black transition">
-                <option value="" disabled selected>SELECT DEPARTMENT</option>
-                <option value="AESA">AESA (Art Education)</option>
-                <option value="NAAES">NAAES (Adult Education)</option>
-                <option value="ULSESA">ULSESA (Science Education)</option>
-                <option value="SSESA">SSESA (Social Science Education)</option>
-                <option value="TVESA">TVESA (Tech & Vocational)</option>
-                <option value="EFSA">EFSA (Educational Foundation)</option>
-                <option value="EMSA">EMSA (Educational Management)</option>
-                <option value="NAPHER-SD">NAPHER-SD (Human Kinetics)</option>
-            </select>
-            
-            <input type="password" id="login-pin" placeholder="DEPT PASSWORD" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-4 text-center tracking-widest text-lg mb-4 focus:border-emerald-500 outline-none uppercase font-black transition">
+            <form onsubmit="event.preventDefault(); window.loginDOS();">
+                <select id="login-dept" required class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-4 text-center text-xl mb-4 focus:border-emerald-500 outline-none font-black transition">
+                    <option value="" disabled selected>SELECT DEPARTMENT</option>
+                    <option value="AESA">AESA (Art Education)</option>
+                    <option value="NAAES">NAAES (Adult Education)</option>
+                    <option value="ULSESA">ULSESA (Science Education)</option>
+                    <option value="SSESA">SSESA (Social Science Education)</option>
+                    <option value="TVESA">TVESA (Tech & Vocational)</option>
+                    <option value="EFSA">EFSA (Educational Foundation)</option>
+                    <option value="EMSA">EMSA (Educational Management)</option>
+                    <option value="NAPHER-SD">NAPHER-SD (Human Kinetics)</option>
+                </select>
+                
+                <input type="password" id="login-pin" required placeholder="DEPT PASSWORD" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-4 text-center tracking-widest text-lg mb-4 focus:border-emerald-500 outline-none uppercase font-black transition">
 
-            <button onclick="loginDOS()" class="w-full bg-emerald-600 text-white font-black tracking-widest py-4 rounded-lg hover:bg-emerald-500 transition shadow-lg">AUTHENTICATE</button>
+                <button type="submit" id="btn-login" class="w-full bg-emerald-600 text-white font-black tracking-widest py-4 rounded-lg hover:bg-emerald-500 transition shadow-lg">AUTHENTICATE</button>
+            </form>
             <p id="login-error" class="text-red-500 text-xs font-bold mt-4 hidden tracking-widest uppercase"><i class="fa-solid fa-triangle-exclamation"></i> INVALID CREDENTIALS</p>
         </div>
     </div>
@@ -205,7 +207,7 @@
             "Table Tennis": { max: 2 }, "Tennis": { max: 3 }, "Badminton": { max: 2 },
             "Ayo": { max: 2 }, "Scrabble": { max: 2 }, "Chess": { max: 2 }, "Ludo": { max: 2 },
             "Efootball": { max: 2 }, "COD": { max: 4 },
-            "Swimming": { max: 4, maleMax: 2, femaleMax: 2 }, // SWIMMING LIMIT UPDATED HERE
+            "Swimming": { max: 4, maleMax: 2, femaleMax: 2 },
             "Walking-Race": { max: 6, maleMax: 3, femaleMax: 3 },
             "100m": { max: 4, maleMax: 2, femaleMax: 2 }, "200m": { max: 4, maleMax: 2, femaleMax: 2 },
             "400m": { max: 4, maleMax: 2, femaleMax: 2 }, "800m": { max: 4, maleMax: 2, femaleMax: 2 },
@@ -213,9 +215,9 @@
             "4 x 400m Mix": { max: 4, maleMax: 2, femaleMax: 2 }, "Long-Jump": { max: 2, maleMax: 1, femaleMax: 1 }
         };
 
-        onSnapshot(doc(db, "nuesa_fest_settings", "system"), (doc) => {
-            if(doc.exists()) {
-                isGateOpen = doc.data().registrationGate === 'open';
+        onSnapshot(doc(db, "nuesa_fest_settings", "system"), (docSnap) => {
+            if(docSnap.exists()) {
+                isGateOpen = docSnap.data().registrationGate === 'open';
                 document.getElementById('gate-warning').style.display = isGateOpen ? 'none' : 'block';
                 const inputs = ['pName', 'pMatric', 'pReceipt', 'pLevel', 'pGender', 'pRole', 'pPhone', 'pSport', 'btnAdd'];
                 inputs.forEach(id => { document.getElementById(id).disabled = !isGateOpen; });
@@ -225,13 +227,28 @@
         });
 
         window.loginDOS = async () => {
+            const btn = document.getElementById('btn-login');
+            btn.innerText = "AUTHENTICATING...";
+            btn.disabled = true;
+
             const dept = document.getElementById('login-dept').value;
             const pin = document.getElementById('login-pin').value.trim().toUpperCase();
-            if(!dept || !pin) { document.getElementById('login-error').innerText = 'FILL ALL FIELDS'; document.getElementById('login-error').classList.remove('hidden'); return; }
+            
+            if(!dept || !pin) { 
+                document.getElementById('login-error').innerText = 'FILL ALL FIELDS'; 
+                document.getElementById('login-error').classList.remove('hidden'); 
+                btn.innerText = "AUTHENTICATE"; btn.disabled = false;
+                return; 
+            }
             if(pin === deptPasswords[dept] || pin === 'NUESAADMIN26') {
-                currentDept = dept; document.getElementById('active-dept-label').innerText = dept; document.getElementById('login-modal').style.display = 'none'; await loadRoster();
+                currentDept = dept; 
+                document.getElementById('active-dept-label').innerText = dept; 
+                document.getElementById('login-modal').style.display = 'none'; 
+                await loadRoster();
             } else {
-                document.getElementById('login-error').innerText = 'INCORRECT PASSWORD'; document.getElementById('login-error').classList.remove('hidden');
+                document.getElementById('login-error').innerText = 'INCORRECT PASSWORD'; 
+                document.getElementById('login-error').classList.remove('hidden');
+                btn.innerText = "AUTHENTICATE"; btn.disabled = false;
             }
         };
 
