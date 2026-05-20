@@ -107,6 +107,8 @@
                             <option value="100m">100m</option><option value="200m">200m</option>
                             <option value="400m">400m</option><option value="800m">800m</option>
                             <option value="1500m">1500m</option><option value="4 x 100m">4 x 100m</option>
+                            <option value="4 x 100m Mix">4 x 100m Mix</option>
+                            <option value="4 x 400m">4 x 400m</option>
                             <option value="4 x 400m Mix">4 x 400m Mix</option><option value="Long-Jump">Long-Jump</option>
                         </optgroup>
                     </select>
@@ -211,8 +213,12 @@
             "Walking-Race": { max: 6, maleMax: 3, femaleMax: 3 },
             "100m": { max: 4, maleMax: 2, femaleMax: 2 }, "200m": { max: 4, maleMax: 2, femaleMax: 2 },
             "400m": { max: 4, maleMax: 2, femaleMax: 2 }, "800m": { max: 4, maleMax: 2, femaleMax: 2 },
-            "1500m": { max: 6, maleMax: 3, femaleMax: 3 }, "4 x 100m": { max: 8, maleMax: 4, femaleMax: 4 },
-            "4 x 400m Mix": { max: 4, maleMax: 2, femaleMax: 2 }, "Long-Jump": { max: 2, maleMax: 1, femaleMax: 1 }
+            "1500m": { max: 6, maleMax: 3, femaleMax: 3 }, 
+            "4 x 100m": { max: 8, maleMax: 4, femaleMax: 4 },
+            "4 x 100m Mix": { max: 4, maleMax: 2, femaleMax: 2 },
+            "4 x 400m": { max: 8, maleMax: 4, femaleMax: 4 },
+            "4 x 400m Mix": { max: 4, maleMax: 2, femaleMax: 2 }, 
+            "Long-Jump": { max: 2, maleMax: 1, femaleMax: 1 }
         };
 
         onSnapshot(doc(db, "nuesa_fest_settings", "system"), (docSnap) => {
