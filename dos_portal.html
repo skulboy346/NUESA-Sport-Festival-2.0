@@ -16,6 +16,7 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
+    <!-- UNIFIED TOP BAR -->
     <div class="bg-black text-white py-2 px-4 flex justify-between items-center z-50 relative border-b border-slate-800">
         <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 hidden md:block">NUESA SPORT FESTIVAL 2.0 (DEAN'S CUP '26)</span>
         <span class="text-[10px] md:text-xs font-bold tracking-widest text-slate-400 md:hidden">NUESA FEST 2.0</span>
@@ -29,6 +30,7 @@
         </div>
     </div>
 
+    <!-- LOGIN MODAL -->
     <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm p-4 transition-all">
         <div class="bg-slate-800 p-8 max-w-sm w-full text-center rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.2)] border border-emerald-500">
             <i class="fa-solid fa-clipboard-user text-5xl neon-green mb-4"></i>
@@ -146,6 +148,7 @@
             </form>
         </div>
 
+        <!-- ON-SCREEN ROSTER LIST -->
         <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl" id="roster-print-area">
             <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
                 <h2 class="text-2xl font-black text-white" id="roster-header-title">Official Roster</h2>
@@ -163,6 +166,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // ADD YOUR FIREBASE CONFIG HERE
         const firebaseConfig = {
             apiKey: "AIzaSyAr2aGfBXiQ2V9nx3stCHv51NQb83ATex4",
             authDomain: "nuesa-sport-festival-26.firebaseapp.com",
@@ -331,7 +335,6 @@
             const gender = document.getElementById('pGender').value;
             const role = document.getElementById('pRole').value;
 
-            // STRICT MULTI-SPORT RECEIPT VALIDATION
             if (role !== 'Coach' && !receiptInput.startsWith("CUB_")) {
                 alert(`REGISTRATION FAILED:\nThe NUESA Dues Receipt number MUST start with 'CUB_'.`); return;
             }
@@ -446,14 +449,17 @@
                 return acc;
             }, {});
 
+            // Strict 800px width with 40px internal padding on the sides ensures perfect centering
             let html = `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0f172a; width: 750px; background-color: #ffffff; position: relative; box-sizing: border-box;">
+                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0f172a; width: 800px; padding: 0 40px; box-sizing: border-box; background-color: #ffffff; position: relative; margin: 0 auto;">
                     
+                    <!-- Watermark -->
                     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-around; align-items: center; opacity: 0.04; color: #3b82f6; font-size: 5rem; font-weight: 900; transform: rotate(-35deg); pointer-events: none; z-index: 0; overflow: hidden; text-transform: uppercase;">
                         <span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span>
                     </div>
 
                     <div style="position: relative; z-index: 10;">
+                        <!-- Header -->
                         <div style="text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 25px;">
                             <h1 style="font-size: 26px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px;">NUESA SPORTS FESTIVAL</h1>
                             <h2 style="font-size: 18px; color: #059669; margin: 5px 0 0 0; letter-spacing: 2px;">THE IMPERIUM</h2>
@@ -467,14 +473,14 @@
                 html += `
                     <div style="margin-bottom: 30px; page-break-inside: auto;">
                         <h3 style="font-size: 14px; background-color: #f1f5f9; padding: 10px; border-left: 4px solid #059669; margin: 0 0 10px 0; text-transform: uppercase; font-weight: bold; color: #0f172a;">${sport} (Total: ${players.length})</h3>
-                        <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; border: 1px solid #cbd5e1;">
+                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; text-align: left; border: 1px solid #cbd5e1;">
                             <thead>
                                 <tr style="background-color: #e2e8f0; color: #334155;">
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">NAME</th>
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">ROLE/LEVEL</th>
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">MATRIC NO</th>
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">RECEIPT</th>
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">GENDER</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 30%;">NAME</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 15%;">ROLE/LVL</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 20%;">MATRIC</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 25%;">RECEIPT</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 10%;">GENDER</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -483,11 +489,11 @@
                 players.forEach(p => {
                     html += `
                         <tr style="border-bottom: 1px solid #e2e8f0; page-break-inside: avoid; background-color: #ffffff;">
-                            <td style="padding: 10px; font-weight: bold; text-transform: uppercase; color: #0f172a;">${p.name}</td>
-                            <td style="padding: 10px; text-transform: uppercase; color: #475569;">${p.role === 'Coach' ? 'COACH' : p.level}</td>
-                            <td style="padding: 10px; font-family: monospace; color: #334155;">${p.matric}</td>
-                            <td style="padding: 10px; font-family: monospace; color: #3b82f6;">${p.receipt || 'N/A'}</td>
-                            <td style="padding: 10px; text-transform: uppercase; color: #475569;">${p.gender}</td>
+                            <td style="padding: 10px; font-weight: bold; text-transform: uppercase; color: #0f172a; word-wrap: break-word;">${p.name}</td>
+                            <td style="padding: 10px; text-transform: uppercase; color: #475569; word-wrap: break-word;">${p.role === 'Coach' ? 'COACH' : p.level}</td>
+                            <td style="padding: 10px; font-family: monospace; color: #334155; word-wrap: break-word;">${p.matric}</td>
+                            <td style="padding: 10px; font-family: monospace; color: #3b82f6; word-wrap: break-word;">${p.receipt || 'N/A'}</td>
+                            <td style="padding: 10px; text-transform: uppercase; color: #475569; word-wrap: break-word;">${p.gender}</td>
                         </tr>
                     `;
                 });
@@ -523,14 +529,14 @@
                 tempDiv.style.position = 'fixed';
                 tempDiv.style.top = '0px';
                 tempDiv.style.left = '0px';
-                tempDiv.style.width = '750px';
+                tempDiv.style.width = '800px';
                 tempDiv.style.backgroundColor = '#ffffff';
                 tempDiv.style.zIndex = '-1000';
                 document.body.appendChild(tempDiv);
 
-                // Pure PDF rendering
+                // Pure PDF rendering: Margin set to exactly 0 on left/right so 800px fits perfectly
                 const opt = { 
-                    margin: 0.4, 
+                    margin: [0.4, 0, 0.4, 0], // Top, Right, Bottom, Left margins
                     filename: filename, 
                     image: { type: 'jpeg', quality: 1.0 }, 
                     html2canvas: { 
@@ -538,8 +544,8 @@
                         useCORS: true, 
                         scrollX: 0, 
                         scrollY: 0,
-                        x: 0,
-                        y: 0
+                        windowWidth: 800,
+                        width: 800
                     }, 
                     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
                 };
