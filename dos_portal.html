@@ -435,7 +435,7 @@
             if(parseInt(document.getElementById('editIndex').value) === index) window.cancelEdit();
         };
 
-        // 🖨️ THE DEDICATED HTML GENERATOR FOR BULLETPROOF PDFS 🖨️
+        // 🖨️ THE DEDICATED HTML GENERATOR FOR PERFECT PDF CENTERING 🖨️
         
         function generatePrintHTML(titleText, sportFilter = null) {
             let playersToRender = rosterData;
@@ -449,9 +449,9 @@
                 return acc;
             }, {});
 
-            // Strict 800px width with 40px internal padding on the sides ensures perfect centering
+            // Width strictly set to 100% to fill the canvas, allowing jsPDF margins to handle the centering
             let html = `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0f172a; width: 800px; padding: 0 40px; box-sizing: border-box; background-color: #ffffff; position: relative; margin: 0 auto;">
+                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0f172a; width: 100%; box-sizing: border-box; padding: 20px;">
                     
                     <!-- Watermark -->
                     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-around; align-items: center; opacity: 0.04; color: #3b82f6; font-size: 5rem; font-weight: 900; transform: rotate(-35deg); pointer-events: none; z-index: 0; overflow: hidden; text-transform: uppercase;">
@@ -473,14 +473,14 @@
                 html += `
                     <div style="margin-bottom: 30px; page-break-inside: auto;">
                         <h3 style="font-size: 14px; background-color: #f1f5f9; padding: 10px; border-left: 4px solid #059669; margin: 0 0 10px 0; text-transform: uppercase; font-weight: bold; color: #0f172a;">${sport} (Total: ${players.length})</h3>
-                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; text-align: left; border: 1px solid #cbd5e1;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; border: 1px solid #cbd5e1;">
                             <thead>
                                 <tr style="background-color: #e2e8f0; color: #334155;">
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 30%;">NAME</th>
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 15%;">ROLE/LVL</th>
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 20%;">MATRIC</th>
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 25%;">RECEIPT</th>
-                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold; width: 10%;">GENDER</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">NAME</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">ROLE/LEVEL</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">MATRIC NO</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">RECEIPT</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">GENDER</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -489,11 +489,11 @@
                 players.forEach(p => {
                     html += `
                         <tr style="border-bottom: 1px solid #e2e8f0; page-break-inside: avoid; background-color: #ffffff;">
-                            <td style="padding: 10px; font-weight: bold; text-transform: uppercase; color: #0f172a; word-wrap: break-word;">${p.name}</td>
-                            <td style="padding: 10px; text-transform: uppercase; color: #475569; word-wrap: break-word;">${p.role === 'Coach' ? 'COACH' : p.level}</td>
-                            <td style="padding: 10px; font-family: monospace; color: #334155; word-wrap: break-word;">${p.matric}</td>
-                            <td style="padding: 10px; font-family: monospace; color: #3b82f6; word-wrap: break-word;">${p.receipt || 'N/A'}</td>
-                            <td style="padding: 10px; text-transform: uppercase; color: #475569; word-wrap: break-word;">${p.gender}</td>
+                            <td style="padding: 10px; font-weight: bold; text-transform: uppercase; color: #0f172a; white-space: nowrap;">${p.name}</td>
+                            <td style="padding: 10px; text-transform: uppercase; color: #475569; white-space: nowrap;">${p.role === 'Coach' ? 'COACH' : p.level}</td>
+                            <td style="padding: 10px; font-family: monospace; color: #334155; white-space: nowrap;">${p.matric}</td>
+                            <td style="padding: 10px; font-family: monospace; color: #3b82f6; white-space: nowrap;">${p.receipt || 'N/A'}</td>
+                            <td style="padding: 10px; text-transform: uppercase; color: #475569; white-space: nowrap;">${p.gender}</td>
                         </tr>
                     `;
                 });
@@ -521,31 +521,27 @@
             try {
                 const htmlString = generatePrintHTML(titleText, targetSport);
                 
-                // Create a temporary off-screen container
+                // Securely anchor the temporary div to the absolute top-left, bypassing mobile scroll issues
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = htmlString;
-                
-                // Absolute Zero Positioning prevents scroll cutoffs
                 tempDiv.style.position = 'fixed';
-                tempDiv.style.top = '0px';
-                tempDiv.style.left = '0px';
-                tempDiv.style.width = '800px';
-                tempDiv.style.backgroundColor = '#ffffff';
+                tempDiv.style.top = '0';
+                tempDiv.style.left = '0';
+                tempDiv.style.width = '800px'; // Set to 800px for strict horizontal sizing
+                tempDiv.style.opacity = '0';   // Invisible to user
                 tempDiv.style.zIndex = '-1000';
                 document.body.appendChild(tempDiv);
 
-                // Pure PDF rendering: Margin set to exactly 0 on left/right so 800px fits perfectly
+                // Let the jsPDF margin handle the math to perfectly center the 800px div on the A4 page
                 const opt = { 
-                    margin: [0.4, 0, 0.4, 0], // Top, Right, Bottom, Left margins
+                    margin: 0.4, 
                     filename: filename, 
                     image: { type: 'jpeg', quality: 1.0 }, 
                     html2canvas: { 
                         scale: 2, 
-                        useCORS: true, 
-                        scrollX: 0, 
-                        scrollY: 0,
-                        windowWidth: 800,
-                        width: 800
+                        useCORS: true,
+                        scrollY: 0, // Ignored scroll
+                        scrollX: 0
                     }, 
                     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
                 };
