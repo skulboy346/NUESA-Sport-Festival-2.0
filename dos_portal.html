@@ -12,83 +12,6 @@
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
         .neon-green { color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.7); }
-        
-        /* 🖨️ STRICT PDF EXPORT STYLES 🖨️ */
-        .pdf-export-mode {
-            background-color: #f8fafc !important; /* White with a touch of blue */
-            padding: 30px !important;
-            width: 900px !important; /* Forces wide layout so names don't cut off */
-            max-width: 900px !important;
-            margin: 0 auto !important;
-        }
-        
-        .pdf-export-mode * {
-            color: #0f172a !important; /* Force all text to dark blue/slate for visibility */
-            border-color: #cbd5e1 !important;
-        }
-
-        /* BRUTE-FORCE HIDE BUTTONS */
-        .pdf-export-mode .hide-on-print {
-            display: none !important;
-        }
-
-        /* FORCE ROWS INTO A STRAIGHT LINE (PREVENTS SQUISHING) */
-        .pdf-export-mode .player-row {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            background-color: #ffffff !important;
-            border: 1px solid #cbd5e1 !important;
-            padding: 10px 15px !important;
-            margin-bottom: 6px !important;
-            border-radius: 6px !important;
-            page-break-inside: avoid !important;
-        }
-        
-        .pdf-export-mode .player-row > div {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            gap: 15px !important;
-        }
-
-        /* Stop text from wrapping to a new line */
-        .pdf-export-mode span, 
-        .pdf-export-mode div {
-            white-space: nowrap !important;
-        }
-
-        /* REPEATING WATERMARK */
-        .pdf-watermark { display: none; }
-        .pdf-export-mode .pdf-watermark {
-            display: flex !important;
-            position: fixed !important;
-            top: 0; left: 0; right: 0; bottom: 0;
-            flex-direction: column;
-            justify-content: space-evenly;
-            align-items: center;
-            opacity: 0.06 !important;
-            color: #3b82f6 !important; 
-            font-size: 7rem !important;
-            font-family: 'Oswald', sans-serif !important;
-            font-weight: 900 !important;
-            transform: rotate(-35deg) scale(1.2);
-            pointer-events: none;
-            z-index: 0;
-            letter-spacing: 0.1em;
-        }
-        
-        .pdf-content-wrapper {
-            position: relative;
-            z-index: 10; 
-        }
-        .sport-group {
-            margin-bottom: 30px !important;
-            page-break-inside: avoid !important;
-        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -140,7 +63,7 @@
                 <span class="text-xl font-black text-white tracking-tighter block">DOS<span class="text-emerald-500">PORTAL</span></span>
             </div>
             <div class="flex gap-3">
-                <button onclick="downloadRosterPDF()" class="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded border border-slate-700 hover:bg-slate-700 transition uppercase tracking-widest shadow-md"><i class="fa-solid fa-file-pdf text-red-400 mr-1"></i> MASTER PDF</button>
+                <button onclick="window.downloadRosterPDF(this)" class="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded border border-slate-700 hover:bg-slate-700 transition uppercase tracking-widest shadow-md"><i class="fa-solid fa-file-pdf text-red-400 mr-1"></i> MASTER PDF</button>
                 <div id="active-dept-label" class="text-slate-400 font-bold tracking-widest uppercase bg-slate-800 px-3 py-2 rounded"></div>
             </div>
         </div>
@@ -225,32 +148,13 @@
 
         <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl" id="roster-print-area">
             
-            <div class="pdf-watermark">
-                <span>THE IMPERIUM</span>
-                <span>THE IMPERIUM</span>
-                <span>THE IMPERIUM</span>
-                <span>THE IMPERIUM</span>
-                <span>THE IMPERIUM</span>
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+                <h2 class="text-2xl font-black text-white" id="roster-header-title">Official Roster</h2>
+                <span id="roster-count" class="bg-emerald-900/30 text-emerald-400 px-3 py-1 rounded text-xs font-bold border border-emerald-900/50">0 Participants</span>
             </div>
             
-            <div class="pdf-content-wrapper">
-                <div id="print-letterhead" class="text-center border-b-2 border-slate-600 pb-4 mb-6" style="display: none;">
-                    <div class="flex justify-center items-center gap-3 mb-2">
-                        <i class="fa-solid fa-crown text-emerald-500 text-3xl"></i>
-                    </div>
-                    <h1 class="text-3xl font-black text-white tracking-widest uppercase mb-1">NUESA SPORTS FESTIVAL</h1>
-                    <h2 class="text-xl font-bold text-emerald-500 tracking-[0.2em] uppercase">THE IMPERIUM</h2>
-                    <p class="text-[10px] text-slate-400 mt-2 uppercase tracking-widest font-bold">Official Dean's Cup '26 Roster Document</p>
-                </div>
-
-                <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
-                    <h2 class="text-2xl font-black text-white" id="roster-header-title">Official Roster</h2>
-                    <span id="roster-count" class="bg-emerald-900/30 text-emerald-400 px-3 py-1 rounded text-xs font-bold border border-emerald-900/50 hide-on-print">0 Participants</span>
-                </div>
-                
-                <div id="roster-list" class="space-y-4">
-                    <div class="text-center py-10 text-slate-500 font-bold">Loading Roster...</div>
-                </div>
+            <div id="roster-list" class="space-y-4">
+                <div class="text-center py-10 text-slate-500 font-bold">Loading Roster...</div>
             </div>
         </div>
 
@@ -388,15 +292,15 @@
                         <div class="bg-slate-800 px-4 py-2 flex justify-between items-center border-b border-slate-700">
                             <span class="text-sm text-white font-black uppercase tracking-widest">${sport}</span>
                             <div class="flex items-center gap-3">
-                                <span class="text-[10px] text-slate-400 font-bold tracking-widest uppercase hide-on-print">Total: ${players.length} (M:${mCount} F:${fCount} C:${cCount})</span>
-                                <button onclick="window.downloadSportPDF('${sport}')" class="hide-on-print text-red-400 hover:text-red-300 transition bg-red-900/20 px-2 py-1 rounded border border-red-900/50" title="Download ${sport} PDF"><i class="fa-solid fa-file-pdf"></i></button>
+                                <span class="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Total: ${players.length} (M:${mCount} F:${fCount} C:${cCount})</span>
+                                <button onclick="window.downloadSportPDF('${sport}', this)" class="text-red-400 hover:text-red-300 transition bg-red-900/20 px-2 py-1 rounded border border-red-900/50" title="Download ${sport} PDF"><i class="fa-solid fa-file-pdf"></i></button>
                             </div>
                         </div>
                         <div class="p-2 space-y-1">
                             ${players.map(player => {
                                 const originalIndex = rosterData.indexOf(player);
                                 return `
-                                <div class="player-row flex flex-col md:flex-row justify-between md:items-center bg-slate-900/50 p-2 rounded hover:bg-slate-800 transition border border-slate-700/50">
+                                <div class="flex flex-col md:flex-row justify-between md:items-center bg-slate-900/50 p-2 rounded hover:bg-slate-800 transition border border-slate-700/50">
                                     <div class="flex items-center flex-wrap gap-2">
                                         <span class="text-white font-bold uppercase text-sm">${player.name}</span> 
                                         ${player.role === 'Coach' ? `<span class="text-[10px] text-yellow-500 font-bold bg-yellow-900/30 px-1 rounded border border-yellow-900/50">COACH</span>` : `<span class="text-[10px] text-orange-400 font-bold bg-orange-900/30 px-1 rounded border border-orange-900/50">${player.level}</span>`}
@@ -405,7 +309,7 @@
                                         <span class="text-[10px] text-slate-500 uppercase">${player.gender === 'Male' ? 'M' : 'F'}</span>
                                     </div>
                                     ${isGateOpen ? `
-                                    <div class="flex gap-3 justify-end items-center hide-on-print mt-2 md:mt-0">
+                                    <div class="flex gap-3 justify-end items-center mt-2 md:mt-0">
                                         <button onclick="window.editAthlete(${originalIndex})" class="text-blue-400 hover:text-blue-300 text-[10px] font-bold uppercase tracking-widest"><i class="fa-solid fa-pen mr-1"></i>Edit</button>
                                         <button onclick="window.removeAthlete(${originalIndex})" class="text-red-500 hover:text-red-400 text-[10px] font-bold uppercase tracking-widest"><i class="fa-solid fa-trash mr-1"></i>Drop</button>
                                     </div>` : ''}
@@ -429,7 +333,6 @@
             const gender = document.getElementById('pGender').value;
             const role = document.getElementById('pRole').value;
 
-            // STRICT MULTI-SPORT RECEIPT VALIDATION
             if (role !== 'Coach' && !receiptInput.startsWith("CUB_")) {
                 alert(`REGISTRATION FAILED:\nThe NUESA Dues Receipt number MUST start with 'CUB_'.`); return;
             }
@@ -530,73 +433,136 @@
             if(parseInt(document.getElementById('editIndex').value) === index) window.cancelEdit();
         };
 
-        // 🖨️ THE ULTIMATE PDF EXPORT ENGINE 🖨️
+        // 🖨️ THE DEDICATED HTML GENERATOR FOR BULLETPROOF PDFS 🖨️
         
-        async function generateBulletproofPDF(filename, titleText, targetSport = null) {
-            const printArea = document.getElementById('roster-print-area');
-            const letterhead = document.getElementById('print-letterhead');
-            const titleEl = document.getElementById('roster-header-title');
-            
-            const originalTitle = titleEl.innerText;
-            const originalStyle = printArea.getAttribute('style') || '';
-            
-            // 1. Force the layout into a strict 1024px desktop view
-            printArea.classList.add('pdf-export-mode');
-            letterhead.style.display = 'block';
-            titleEl.innerText = titleText;
-            
-            // Hide buttons using JS to be absolutely sure
-            const hideElements = document.querySelectorAll('.hide-on-print');
-            hideElements.forEach(el => el.style.setProperty('display', 'none', 'important'));
-
-            // Isolate sport if requested
-            const allGroups = document.querySelectorAll('.sport-group');
-            if (targetSport) {
-                allGroups.forEach(group => {
-                    if(group.getAttribute('data-sport') !== targetSport) {
-                        group.style.setProperty('display', 'none', 'important');
-                    }
-                });
+        function generatePrintHTML(titleText, sportFilter = null) {
+            let playersToRender = rosterData;
+            if (sportFilter) {
+                playersToRender = rosterData.filter(p => p.sport === sportFilter);
             }
 
-            // 2. Instruct html2pdf to snapshot the forced 1024px layout
-            const opt = { 
-                margin: [0.4, 0.4, 0.4, 0.4], 
-                filename: filename, 
-                image: { type: 'jpeg', quality: 1.0 }, 
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 1024, width: 1024, backgroundColor: '#ffffff' }, 
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css', 'legacy'] } 
-            };
+            const grouped = playersToRender.reduce((acc, p) => {
+                if (!acc[p.sport]) acc[p.sport] = [];
+                acc[p.sport].push(p);
+                return acc;
+            }, {});
 
-            await html2pdf().set(opt).from(printArea).save();
+            let html = `
+                <div style="padding: 40px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0f172a; width: 800px; background-color: #ffffff; position: relative; min-height: 1100px; box-sizing: border-box;">
+                    
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-around; align-items: center; opacity: 0.04; color: #3b82f6; font-size: 5rem; font-weight: 900; transform: rotate(-35deg); pointer-events: none; z-index: 0; overflow: hidden; text-transform: uppercase;">
+                        <span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span>
+                    </div>
 
-            // 3. Revert to normal mobile-friendly dark mode view
-            printArea.classList.remove('pdf-export-mode');
-            printArea.setAttribute('style', originalStyle);
-            letterhead.style.display = 'none';
-            titleEl.innerText = originalTitle;
-            
-            hideElements.forEach(el => el.style.display = '');
-            if (targetSport) {
-                allGroups.forEach(group => group.style.display = '');
+                    <div style="position: relative; z-index: 10;">
+                        <div style="text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 20px; margin-bottom: 30px;">
+                            <h1 style="font-size: 28px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px;">NUESA SPORTS FESTIVAL</h1>
+                            <h2 style="font-size: 20px; color: #059669; margin: 5px 0 0 0; letter-spacing: 2px;">THE IMPERIUM</h2>
+                            <p style="font-size: 12px; color: #64748b; margin: 10px 0 0 0; text-transform: uppercase; font-weight: bold;">Official Dean's Cup '26 Roster Document</p>
+                        </div>
+
+                        <h2 style="font-size: 20px; text-transform: uppercase; margin-bottom: 20px; font-weight: 900;">${titleText}</h2>
+            `;
+
+            for (const [sport, players] of Object.entries(grouped)) {
+                html += `
+                    <div style="margin-bottom: 30px; page-break-inside: auto;">
+                        <h3 style="font-size: 14px; background-color: #f1f5f9; padding: 10px; border-left: 4px solid #059669; margin: 0 0 10px 0; text-transform: uppercase; font-weight: bold; color: #0f172a;">${sport} (Total: ${players.length})</h3>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; border: 1px solid #cbd5e1;">
+                            <thead>
+                                <tr style="background-color: #e2e8f0; color: #334155;">
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">NAME</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">ROLE/LEVEL</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">MATRIC NO</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">RECEIPT</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #cbd5e1; font-weight: bold;">GENDER</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                players.forEach(p => {
+                    html += `
+                        <tr style="border-bottom: 1px solid #e2e8f0; page-break-inside: avoid; background-color: #ffffff;">
+                            <td style="padding: 10px; font-weight: bold; text-transform: uppercase; color: #0f172a;">${p.name}</td>
+                            <td style="padding: 10px; text-transform: uppercase; color: #475569;">${p.role === 'Coach' ? 'COACH' : p.level}</td>
+                            <td style="padding: 10px; font-family: monospace; color: #334155;">${p.matric}</td>
+                            <td style="padding: 10px; font-family: monospace; color: #3b82f6;">${p.receipt || 'N/A'}</td>
+                            <td style="padding: 10px; text-transform: uppercase; color: #475569;">${p.gender}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            html += `
+                    </div>
+                </div>
+            `;
+
+            return html;
+        }
+
+        async function processAndDownloadPDF(filename, titleText, targetSport = null, btnElement) {
+            const originalText = btnElement.innerHTML;
+            btnElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            btnElement.disabled = true;
+
+            try {
+                const htmlString = generatePrintHTML(titleText, targetSport);
+                
+                // Create a temporary off-screen container
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlString;
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.top = '-9999px';
+                tempDiv.style.left = '0';
+                tempDiv.style.zIndex = '-1000';
+                document.body.appendChild(tempDiv);
+
+                // Generate PDF from the clean HTML table
+                const opt = { 
+                    margin: 0, 
+                    filename: filename, 
+                    image: { type: 'jpeg', quality: 1.0 }, 
+                    html2canvas: { scale: 2, useCORS: true, windowWidth: 800, width: 800 }, 
+                    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
+                };
+
+                await html2pdf().set(opt).from(tempDiv.firstElementChild).save();
+                
+                // Cleanup
+                document.body.removeChild(tempDiv);
+            } catch(e) {
+                console.error(e);
+                alert("An error occurred while generating the PDF.");
+            } finally {
+                btnElement.innerHTML = originalText;
+                btnElement.disabled = false;
             }
         }
 
-        window.downloadSportPDF = (targetSport) => {
+        window.downloadSportPDF = (targetSport, btnElement) => {
             const formattedSport = targetSport.replace(/\s+/g, '_').toUpperCase();
-            generateBulletproofPDF(
-                `NUESA_FEST26_${currentDept}_${formattedSport}.pdf`,
-                `${currentDept} - ${targetSport.toUpperCase()}`,
-                targetSport
+            processAndDownloadPDF(
+                `NUESA_FEST26_${currentDept}_${formattedSport}.pdf`, 
+                `${currentDept} - ${targetSport.toUpperCase()}`, 
+                targetSport,
+                btnElement
             );
         };
 
-        window.downloadRosterPDF = () => {
-            generateBulletproofPDF(
-                `NUESA_FEST26_${currentDept}_MASTER_ROSTER.pdf`,
-                `${currentDept} - MASTER ROSTER`,
-                null
+        window.downloadRosterPDF = (btnElement) => {
+            processAndDownloadPDF(
+                `NUESA_FEST26_${currentDept}_MASTER_ROSTER.pdf`, 
+                `${currentDept} - MASTER ROSTER`, 
+                null,
+                btnElement
             );
         };
     </script>
