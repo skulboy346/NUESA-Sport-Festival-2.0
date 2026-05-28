@@ -13,17 +13,25 @@
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
         .neon-green { color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.7); }
         
-        /* 🖨️ SMART PDF EXPORT STYLES 🖨️ */
+        /* 🖨️ STRICT PDF EXPORT STYLES 🖨️ */
         .pdf-export-mode {
             background-color: #ffffff !important;
             color: #0f172a !important; 
             position: relative;
             overflow: visible !important; 
             padding: 30px !important;
-            /* FIXED: Force desktop width so names never cut off on the sides */
-            width: 900px !important; 
-            max-width: none !important;
+            /* FORCE STRICT A4 PROPORTIONS */
+            width: 800px !important; 
+            min-width: 800px !important;
+            max-width: 800px !important;
+            box-sizing: border-box !important;
         }
+        
+        /* ABSOLUTE HIDE FOR ACTION BUTTONS IN PDF */
+        .pdf-export-mode .hide-on-print {
+            display: none !important;
+        }
+
         .pdf-export-mode * {
             color: #0f172a !important; 
             border-color: #cbd5e1 !important;
@@ -39,18 +47,22 @@
             border: 1px solid #e2e8f0 !important;
         }
         
-        /* FIXED: Force rows to stay in a single line, preventing mobile squishing */
+        /* FORCE PERFECT SINGLE-LINE ROWS (NO SQUISHING) */
         .pdf-export-mode .player-row {
             display: flex !important;
             flex-direction: row !important;
+            flex-wrap: nowrap !important;
             align-items: center !important;
             justify-content: space-between !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
         }
         .pdf-export-mode .player-row > div {
             display: flex !important;
             flex-direction: row !important;
             align-items: center !important;
             flex-wrap: nowrap !important;
+            white-space: nowrap !important; /* Stops text from breaking to next line */
         }
 
         /* Watermark styling */
@@ -76,13 +88,8 @@
             position: relative;
             z-index: 10; 
         }
-        /* Page break rules for A4 formatting */
         .sport-group {
             margin-bottom: 24px !important;
-        }
-        .player-row {
-            page-break-inside: avoid;
-            break-inside: avoid;
         }
     </style>
 </head>
@@ -530,25 +537,22 @@
         function applyPDFStyling() {
             const printArea = document.getElementById('roster-print-area');
             const letterhead = document.getElementById('print-letterhead');
-            const buttons = document.querySelectorAll('.hide-on-print'); 
             
             // Activate the Smart Print CSS classes
             printArea.classList.add('pdf-export-mode');
             letterhead.style.display = 'block';
-            buttons.forEach(b => b.style.display = 'none');
-            return { printArea, letterhead, buttons };
+            return { printArea, letterhead };
         }
         
-        function removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, allGroups) {
+        function removePDFStyling(printArea, letterhead, titleEl, originalTitle, allGroups) {
             printArea.classList.remove('pdf-export-mode');
             letterhead.style.display = 'none';
-            buttons.forEach(b => b.style.display = ''); 
             titleEl.innerText = originalTitle;
             if(allGroups) allGroups.forEach(group => group.style.display = ''); 
         }
 
         window.downloadSportPDF = (targetSport) => {
-            const { printArea, letterhead, buttons } = applyPDFStyling();
+            const { printArea, letterhead } = applyPDFStyling();
             
             // Hide all other sports
             const allGroups = document.querySelectorAll('.sport-group');
@@ -562,36 +566,34 @@
 
             const formattedSport = targetSport.replace(/\s+/g, '_').toUpperCase();
 
-            // html2pdf Engine specifically tuned for A4 mapping
             html2pdf().set({ 
                 margin: [0.4, 0.3, 0.4, 0.3], 
                 filename: `NUESA_FEST26_${currentDept}_${formattedSport}.pdf`, 
                 image: { type: 'jpeg', quality: 1.0 }, 
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 1024 }, 
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 800 }, 
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['css'] } 
             }).from(printArea).save().then(() => { 
-                removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, allGroups);
+                removePDFStyling(printArea, letterhead, titleEl, originalTitle, allGroups);
             });
         };
 
         window.downloadRosterPDF = () => {
-            const { printArea, letterhead, buttons } = applyPDFStyling();
+            const { printArea, letterhead } = applyPDFStyling();
             
             const titleEl = document.getElementById('roster-header-title');
             const originalTitle = titleEl.innerText;
             titleEl.innerText = `${currentDept} - MASTER ROSTER`;
 
-            // html2pdf Engine specifically tuned for A4 mapping
             html2pdf().set({ 
                 margin: [0.4, 0.3, 0.4, 0.3], 
                 filename: `NUESA_FEST26_${currentDept}_MASTER_ROSTER.pdf`, 
                 image: { type: 'jpeg', quality: 1.0 }, 
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 1024 }, 
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 800 }, 
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['css'] }
             }).from(printArea).save().then(() => { 
-                removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, null);
+                removePDFStyling(printArea, letterhead, titleEl, originalTitle, null);
             });
         };
     </script>
