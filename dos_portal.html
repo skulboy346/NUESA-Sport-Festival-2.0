@@ -19,7 +19,10 @@
             color: #0f172a !important; 
             position: relative;
             overflow: visible !important; 
-            padding: 20px !important;
+            padding: 30px !important;
+            /* FIXED: Force desktop width so names never cut off on the sides */
+            width: 900px !important; 
+            max-width: none !important;
         }
         .pdf-export-mode * {
             color: #0f172a !important; 
@@ -35,6 +38,21 @@
             background-color: #ffffff !important;
             border: 1px solid #e2e8f0 !important;
         }
+        
+        /* FIXED: Force rows to stay in a single line, preventing mobile squishing */
+        .pdf-export-mode .player-row {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+        }
+        .pdf-export-mode .player-row > div {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+        }
+
         /* Watermark styling */
         .pdf-watermark { display: none; }
         .pdf-export-mode .pdf-watermark {
@@ -237,6 +255,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // ADD YOUR FIREBASE CONFIG HERE
         const firebaseConfig = {
             apiKey: "AIzaSyAr2aGfBXiQ2V9nx3stCHv51NQb83ATex4",
             authDomain: "nuesa-sport-festival-26.firebaseapp.com",
@@ -297,9 +316,8 @@
             }
         });
 
-        // FIXED: REBUILT LOGIN EVENT LISTENER
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Safely prevents page reload
+            e.preventDefault(); 
             const btn = document.getElementById('btn-login');
             btn.innerText = "AUTHENTICATING...";
             btn.disabled = true;
@@ -546,7 +564,7 @@
 
             // html2pdf Engine specifically tuned for A4 mapping
             html2pdf().set({ 
-                margin: [0.5, 0.5, 0.5, 0.5], 
+                margin: [0.4, 0.3, 0.4, 0.3], 
                 filename: `NUESA_FEST26_${currentDept}_${formattedSport}.pdf`, 
                 image: { type: 'jpeg', quality: 1.0 }, 
                 html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 1024 }, 
@@ -566,7 +584,7 @@
 
             // html2pdf Engine specifically tuned for A4 mapping
             html2pdf().set({ 
-                margin: [0.5, 0.5, 0.5, 0.5], 
+                margin: [0.4, 0.3, 0.4, 0.3], 
                 filename: `NUESA_FEST26_${currentDept}_MASTER_ROSTER.pdf`, 
                 image: { type: 'jpeg', quality: 1.0 }, 
                 html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 1024 }, 
