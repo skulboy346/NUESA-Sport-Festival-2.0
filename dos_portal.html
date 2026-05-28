@@ -147,7 +147,6 @@
         </div>
 
         <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl" id="roster-print-area">
-            
             <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
                 <h2 class="text-2xl font-black text-white" id="roster-header-title">Official Roster</h2>
                 <span id="roster-count" class="bg-emerald-900/30 text-emerald-400 px-3 py-1 rounded text-xs font-bold border border-emerald-900/50">0 Participants</span>
@@ -164,7 +163,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // ADD YOUR FIREBASE CONFIG HERE
         const firebaseConfig = {
             apiKey: "AIzaSyAr2aGfBXiQ2V9nx3stCHv51NQb83ATex4",
             authDomain: "nuesa-sport-festival-26.firebaseapp.com",
@@ -333,6 +331,7 @@
             const gender = document.getElementById('pGender').value;
             const role = document.getElementById('pRole').value;
 
+            // STRICT MULTI-SPORT RECEIPT VALIDATION
             if (role !== 'Coach' && !receiptInput.startsWith("CUB_")) {
                 alert(`REGISTRATION FAILED:\nThe NUESA Dues Receipt number MUST start with 'CUB_'.`); return;
             }
@@ -448,20 +447,20 @@
             }, {});
 
             let html = `
-                <div style="padding: 40px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0f172a; width: 800px; background-color: #ffffff; position: relative; min-height: 1100px; box-sizing: border-box;">
+                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0f172a; width: 750px; background-color: #ffffff; position: relative; box-sizing: border-box;">
                     
                     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-around; align-items: center; opacity: 0.04; color: #3b82f6; font-size: 5rem; font-weight: 900; transform: rotate(-35deg); pointer-events: none; z-index: 0; overflow: hidden; text-transform: uppercase;">
                         <span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span><span>THE IMPERIUM</span>
                     </div>
 
                     <div style="position: relative; z-index: 10;">
-                        <div style="text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 20px; margin-bottom: 30px;">
-                            <h1 style="font-size: 28px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px;">NUESA SPORTS FESTIVAL</h1>
-                            <h2 style="font-size: 20px; color: #059669; margin: 5px 0 0 0; letter-spacing: 2px;">THE IMPERIUM</h2>
-                            <p style="font-size: 12px; color: #64748b; margin: 10px 0 0 0; text-transform: uppercase; font-weight: bold;">Official Dean's Cup '26 Roster Document</p>
+                        <div style="text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 25px;">
+                            <h1 style="font-size: 26px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px;">NUESA SPORTS FESTIVAL</h1>
+                            <h2 style="font-size: 18px; color: #059669; margin: 5px 0 0 0; letter-spacing: 2px;">THE IMPERIUM</h2>
+                            <p style="font-size: 11px; color: #64748b; margin: 8px 0 0 0; text-transform: uppercase; font-weight: bold;">Official Dean's Cup '26 Roster Document</p>
                         </div>
 
-                        <h2 style="font-size: 20px; text-transform: uppercase; margin-bottom: 20px; font-weight: 900;">${titleText}</h2>
+                        <h2 style="font-size: 18px; text-transform: uppercase; margin-bottom: 15px; font-weight: 900;">${titleText}</h2>
             `;
 
             for (const [sport, players] of Object.entries(grouped)) {
@@ -519,18 +518,29 @@
                 // Create a temporary off-screen container
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = htmlString;
-                tempDiv.style.position = 'absolute';
-                tempDiv.style.top = '-9999px';
-                tempDiv.style.left = '0';
+                
+                // Absolute Zero Positioning prevents scroll cutoffs
+                tempDiv.style.position = 'fixed';
+                tempDiv.style.top = '0px';
+                tempDiv.style.left = '0px';
+                tempDiv.style.width = '750px';
+                tempDiv.style.backgroundColor = '#ffffff';
                 tempDiv.style.zIndex = '-1000';
                 document.body.appendChild(tempDiv);
 
-                // Generate PDF from the clean HTML table
+                // Pure PDF rendering
                 const opt = { 
-                    margin: 0, 
+                    margin: 0.4, 
                     filename: filename, 
                     image: { type: 'jpeg', quality: 1.0 }, 
-                    html2canvas: { scale: 2, useCORS: true, windowWidth: 800, width: 800 }, 
+                    html2canvas: { 
+                        scale: 2, 
+                        useCORS: true, 
+                        scrollX: 0, 
+                        scrollY: 0,
+                        x: 0,
+                        y: 0
+                    }, 
                     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
                 };
 
