@@ -13,25 +13,12 @@
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
         .neon-green { color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.7); }
         
-        /* 🖨️ STRICT PDF EXPORT STYLES 🖨️ */
+        /* 🖨️ SMART PDF EXPORT STYLES 🖨️ */
         .pdf-export-mode {
             background-color: #ffffff !important;
             color: #0f172a !important; 
             position: relative;
-            overflow: visible !important; 
-            padding: 30px !important;
-            /* FORCE STRICT A4 PROPORTIONS */
-            width: 800px !important; 
-            min-width: 800px !important;
-            max-width: 800px !important;
-            box-sizing: border-box !important;
         }
-        
-        /* ABSOLUTE HIDE FOR ACTION BUTTONS IN PDF */
-        .pdf-export-mode .hide-on-print {
-            display: none !important;
-        }
-
         .pdf-export-mode * {
             color: #0f172a !important; 
             border-color: #cbd5e1 !important;
@@ -54,15 +41,13 @@
             flex-wrap: nowrap !important;
             align-items: center !important;
             justify-content: space-between !important;
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
         }
         .pdf-export-mode .player-row > div {
             display: flex !important;
             flex-direction: row !important;
             align-items: center !important;
             flex-wrap: nowrap !important;
-            white-space: nowrap !important; /* Stops text from breaking to next line */
+            white-space: nowrap !important; /* Forces text to stay on one line */
         }
 
         /* Watermark styling */
@@ -90,6 +75,7 @@
         }
         .sport-group {
             margin-bottom: 24px !important;
+            page-break-inside: avoid;
         }
     </style>
 </head>
@@ -537,24 +523,38 @@
         function applyPDFStyling() {
             const printArea = document.getElementById('roster-print-area');
             const letterhead = document.getElementById('print-letterhead');
+            const buttons = document.querySelectorAll('.hide-on-print'); 
             
-            // Activate the Smart Print CSS classes
+            // Save original styling
+            printArea.setAttribute('data-original-style', printArea.getAttribute('style') || '');
+            
+            // Force Desktop Size specifically for the snapshot
+            printArea.style.width = '1024px';
+            printArea.style.maxWidth = '1024px';
+            printArea.style.padding = '40px';
+            printArea.style.backgroundColor = '#ffffff';
+
             printArea.classList.add('pdf-export-mode');
             letterhead.style.display = 'block';
-            return { printArea, letterhead };
+            buttons.forEach(b => b.style.display = 'none');
+            return { printArea, letterhead, buttons };
         }
         
-        function removePDFStyling(printArea, letterhead, titleEl, originalTitle, allGroups) {
+        function removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, allGroups) {
             printArea.classList.remove('pdf-export-mode');
+            
+            // Restore original styling
+            printArea.setAttribute('style', printArea.getAttribute('data-original-style') || '');
+            
             letterhead.style.display = 'none';
+            buttons.forEach(b => b.style.display = ''); 
             titleEl.innerText = originalTitle;
             if(allGroups) allGroups.forEach(group => group.style.display = ''); 
         }
 
         window.downloadSportPDF = (targetSport) => {
-            const { printArea, letterhead } = applyPDFStyling();
+            const { printArea, letterhead, buttons } = applyPDFStyling();
             
-            // Hide all other sports
             const allGroups = document.querySelectorAll('.sport-group');
             allGroups.forEach(group => {
                 if(group.getAttribute('data-sport') !== targetSport) group.style.display = 'none';
@@ -563,37 +563,35 @@
             const titleEl = document.getElementById('roster-header-title');
             const originalTitle = titleEl.innerText;
             titleEl.innerText = `${currentDept} - ${targetSport.toUpperCase()}`;
-
             const formattedSport = targetSport.replace(/\s+/g, '_').toUpperCase();
 
+            // Specifically tuned to capture the forced 1024px layout
             html2pdf().set({ 
-                margin: [0.4, 0.3, 0.4, 0.3], 
+                margin: 0.5, 
                 filename: `NUESA_FEST26_${currentDept}_${formattedSport}.pdf`, 
                 image: { type: 'jpeg', quality: 1.0 }, 
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 800 }, 
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css'] } 
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 1024, width: 1024 }, 
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
             }).from(printArea).save().then(() => { 
-                removePDFStyling(printArea, letterhead, titleEl, originalTitle, allGroups);
+                removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, allGroups);
             });
         };
 
         window.downloadRosterPDF = () => {
-            const { printArea, letterhead } = applyPDFStyling();
+            const { printArea, letterhead, buttons } = applyPDFStyling();
             
             const titleEl = document.getElementById('roster-header-title');
             const originalTitle = titleEl.innerText;
             titleEl.innerText = `${currentDept} - MASTER ROSTER`;
 
             html2pdf().set({ 
-                margin: [0.4, 0.3, 0.4, 0.3], 
+                margin: 0.5, 
                 filename: `NUESA_FEST26_${currentDept}_MASTER_ROSTER.pdf`, 
                 image: { type: 'jpeg', quality: 1.0 }, 
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 800 }, 
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css'] }
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 1024, width: 1024 }, 
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
             }).from(printArea).save().then(() => { 
-                removePDFStyling(printArea, letterhead, titleEl, originalTitle, null);
+                removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, null);
             });
         };
     </script>
