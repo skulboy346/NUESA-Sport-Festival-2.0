@@ -404,4 +404,178 @@
             const requiredCodes = deptCodes[currentDept]; 
             const sport = document.getElementById('pSport').value;
             const gender = document.getElementById('pGender').value;
-            const
+            const role = document.getElementById('pRole').value;
+
+            // STRICT MULTI-SPORT RECEIPT VALIDATION
+            if (role !== 'Coach' && !receiptInput.startsWith("CUB_")) {
+                alert(`REGISTRATION FAILED:\nThe NUESA Dues Receipt number MUST start with 'CUB_'.`); return;
+            }
+            
+            const existingUsersWithReceipt = rosterData.filter((p, idx) => p.receipt === receiptInput && idx !== editIndex);
+            if (existingUsersWithReceipt.length > 0) {
+                const referenceAthlete = existingUsersWithReceipt[0];
+                
+                if (referenceAthlete.matric !== matricInput) { 
+                    alert(`REGISTRATION FAILED:\nReceipt ${receiptInput} is already linked to Matric No: ${referenceAthlete.matric}.`); return; 
+                }
+                if (referenceAthlete.name !== inputName) {
+                    alert(`REGISTRATION FAILED:\nReceipt ${receiptInput} is already linked to Name: ${referenceAthlete.name}. Details must match exactly.`); return;
+                }
+                if (referenceAthlete.gender !== gender) {
+                    alert(`REGISTRATION FAILED:\nGender mismatch with the original registration for this receipt.`); return;
+                }
+
+                const alreadyInSport = existingUsersWithReceipt.find(p => p.sport === sport);
+                if (alreadyInSport) { alert(`REGISTRATION FAILED:\nThis athlete is already registered for ${sport}.`); return; }
+            }
+
+            if (role !== 'Coach') {
+                if (matricInput.length !== 9) { alert(`REGISTRATION FAILED:\nMatric Number must be exactly 9 characters.`); return; }
+                
+                const isValidMatric = requiredCodes.some(code => matricInput.includes(code));
+                if (!isValidMatric) { 
+                    alert(`REGISTRATION FAILED:\nMatric Number must contain the valid code(s) [${requiredCodes.join(' or ')}] for ${currentDept}.`); 
+                    return; 
+                }
+                
+                if (ballGames.includes(sport)) {
+                    let ballGameCount = 0;
+                    rosterData.forEach((p, idx) => {
+                        if (p.matric === matricInput && idx !== editIndex && ballGames.includes(p.sport)) ballGameCount++;
+                    });
+                    if (ballGameCount >= 3) { alert(`REGISTRATION FAILED:\nAthlete is already registered for 3 Ball Games. Max allowed is 3.`); return; }
+                }
+            }
+
+            const limits = sportLimits[sport];
+            let currentTotal = 0, currentMale = 0, currentFemale = 0;
+            rosterData.forEach((p, idx) => {
+                if (p.sport === sport && idx !== editIndex) {
+                    currentTotal++;
+                    if (p.gender === 'Male') currentMale++;
+                    if (p.gender === 'Female') currentFemale++;
+                }
+            });
+
+            if (currentTotal >= limits.max) { alert(`LIMIT REACHED: ${sport} allows a max of ${limits.max} participants.`); return; }
+            if (gender === 'Male' && limits.maleMax !== undefined && currentMale >= limits.maleMax) { alert(`LIMIT REACHED: ${sport} allows max ${limits.maleMax} Males.`); return; }
+            if (gender === 'Female' && limits.femaleMax !== undefined && currentFemale >= limits.femaleMax) { alert(`LIMIT REACHED: ${sport} allows max ${limits.femaleMax} Females.`); return; }
+            if (gender === 'Male' && limits.minFemale !== undefined) {
+                const femalesNeeded = Math.max(0, limits.minFemale - currentFemale);
+                if ((limits.max - currentTotal) - 1 < femalesNeeded) { alert(`RESERVATION REQUIRED:\n${sport} requires minimum ${limits.minFemale} Female(s). You must save the remaining slots.`); return; }
+            }
+
+            const athleteData = {
+                name: inputName,
+                matric: matricInput, receipt: receiptInput,
+                level: document.getElementById('pLevel').value,
+                gender: gender, role: role, sport: sport,
+                phone: document.getElementById('pPhone').value.trim()
+            };
+            
+            if (editIndex >= 0) { rosterData[editIndex] = athleteData; } else { rosterData.push(athleteData); }
+            await setDoc(doc(db, "nuesa_fest_rosters", currentDept), { players: rosterData }, { merge: true });
+            window.cancelEdit();
+        });
+
+        window.editAthlete = (index) => {
+            if(!isGateOpen) return;
+            const p = rosterData[index];
+            document.getElementById('pName').value = p.name; document.getElementById('pMatric').value = p.matric;
+            document.getElementById('pReceipt').value = p.receipt || '';
+            document.getElementById('pLevel').value = p.level || ''; document.getElementById('pGender').value = p.gender || '';
+            document.getElementById('pRole').value = p.role || 'Athlete'; document.getElementById('pPhone').value = p.phone || '';
+            document.getElementById('pSport').value = p.sport; document.getElementById('editIndex').value = index;
+            
+            document.getElementById('form-title').innerHTML = '<i class="fa-solid fa-pen text-blue-500 mr-2"></i> Edit Record';
+            document.getElementById('btnAdd').innerText = 'UPDATE RECORD';
+            document.getElementById('btnAdd').classList.replace('bg-emerald-600', 'bg-blue-600'); document.getElementById('btnAdd').classList.replace('hover:bg-emerald-500', 'hover:bg-blue-500');
+            document.getElementById('btnCancel').classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); updateLimitTracker();
+        };
+
+        window.cancelEdit = () => {
+            document.getElementById('addAthleteForm').reset(); document.getElementById('editIndex').value = "-1";
+            document.getElementById('form-title').innerText = 'Register Athlete'; document.getElementById('btnAdd').innerText = 'ADD TO ROSTER';
+            document.getElementById('btnAdd').classList.replace('bg-blue-600', 'bg-emerald-600'); document.getElementById('btnAdd').classList.replace('hover:bg-blue-500', 'hover:bg-emerald-500');
+            document.getElementById('btnCancel').classList.add('hidden'); updateLimitTracker();
+        };
+
+        window.removeAthlete = async (index) => {
+            if(!isGateOpen || !confirm("Drop this participant from the official roster?")) return;
+            rosterData.splice(index, 1);
+            await setDoc(doc(db, "nuesa_fest_rosters", currentDept), { players: rosterData }, { merge: true });
+            if(parseInt(document.getElementById('editIndex').value) === index) window.cancelEdit();
+        };
+
+        // 🖨️ PDF EXPORT ENGINE 🖨️
+        
+        function applyPDFStyling() {
+            const printArea = document.getElementById('roster-print-area');
+            const letterhead = document.getElementById('print-letterhead');
+            const buttons = document.querySelectorAll('.hide-on-print'); 
+            
+            // Activate the Smart Print CSS classes
+            printArea.classList.add('pdf-export-mode');
+            letterhead.style.display = 'block';
+            buttons.forEach(b => b.style.display = 'none');
+            return { printArea, letterhead, buttons };
+        }
+        
+        function removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, allGroups) {
+            printArea.classList.remove('pdf-export-mode');
+            letterhead.style.display = 'none';
+            buttons.forEach(b => b.style.display = ''); 
+            titleEl.innerText = originalTitle;
+            if(allGroups) allGroups.forEach(group => group.style.display = ''); 
+        }
+
+        window.downloadSportPDF = (targetSport) => {
+            const { printArea, letterhead, buttons } = applyPDFStyling();
+            
+            // Hide all other sports
+            const allGroups = document.querySelectorAll('.sport-group');
+            allGroups.forEach(group => {
+                if(group.getAttribute('data-sport') !== targetSport) group.style.display = 'none';
+            });
+
+            const titleEl = document.getElementById('roster-header-title');
+            const originalTitle = titleEl.innerText;
+            titleEl.innerText = `${currentDept} - ${targetSport.toUpperCase()}`;
+
+            const formattedSport = targetSport.replace(/\s+/g, '_').toUpperCase();
+
+            // html2pdf Engine specifically tuned for A4 mapping
+            html2pdf().set({ 
+                margin: [0.5, 0.5, 0.5, 0.5], 
+                filename: `NUESA_FEST26_${currentDept}_${formattedSport}.pdf`, 
+                image: { type: 'jpeg', quality: 1.0 }, 
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 1024 }, 
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css'] } 
+            }).from(printArea).save().then(() => { 
+                removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, allGroups);
+            });
+        };
+
+        window.downloadRosterPDF = () => {
+            const { printArea, letterhead, buttons } = applyPDFStyling();
+            
+            const titleEl = document.getElementById('roster-header-title');
+            const originalTitle = titleEl.innerText;
+            titleEl.innerText = `${currentDept} - MASTER ROSTER`;
+
+            // html2pdf Engine specifically tuned for A4 mapping
+            html2pdf().set({ 
+                margin: [0.5, 0.5, 0.5, 0.5], 
+                filename: `NUESA_FEST26_${currentDept}_MASTER_ROSTER.pdf`, 
+                image: { type: 'jpeg', quality: 1.0 }, 
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 1024 }, 
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css'] }
+            }).from(printArea).save().then(() => { 
+                removePDFStyling(printArea, letterhead, buttons, titleEl, originalTitle, null);
+            });
+        };
+    </script>
+</body>
+</html>
